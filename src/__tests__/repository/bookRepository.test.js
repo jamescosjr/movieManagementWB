@@ -1,4 +1,4 @@
-import { create, findAll, findByTitle, deleteById, books } from '../../repository/bookRepository.js';
+import { create, findAll, findByTitle, deleteById, books, updateById } from '../../repository/bookRepository.js';
 import { generateId } from '../../utils/generateId.js';
 
 jest.mock('../../utils/generateId.js');
@@ -56,5 +56,19 @@ describe('Book Repository', () => {
         const deletedBook = deleteById('non-existing-id');
 
         expect(deletedBook).toBeNull();
+    });
+
+    it('should update a book by id', () => {
+        mockGenerateId.mockReturnValue('unique-id');
+        const book = create({ title: 'Title to Update', author: 'Author', year: 2022 });
+        const updatedBook = updateById(book.id, { title: 'Updated Title' });
+
+        expect(updatedBook).toMatchObject({ ...book, title: 'Updated Title' });
+    });
+
+    it('should return null when updating a book by a non-existing id', () => {
+        const updatedBook = updateById('non-existing-id', { title: 'Updated Title' });
+
+        expect(updatedBook).toBeNull();
     });
 });

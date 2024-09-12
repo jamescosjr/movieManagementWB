@@ -1,6 +1,5 @@
-import { createBookHandler, listBooksHandler, findBookByTitleHandler, deleteBookHandler } from '../../controllers/bookController.js';
+import { createBookHandler, listBooksHandler, findBookByTitleHandler, deleteBookHandler, updateBookHandler } from '../../controllers/bookController.js';
 import * as bookService from '../../service/bookService.js';
-import { createBook, listBooks, findBookByTitle, deleteBookById } from '../../service/bookService.js';
 
 const logSpy = jest.spyOn(console, 'log').mockImplementation();
 const errorSpy = jest.spyOn(console, 'error').mockImplementation();
@@ -80,5 +79,22 @@ describe('Book Handlers', () => {
         deleteBookHandler(1);
     
         expect(errorSpy).toHaveBeenCalledWith('Error deleting book:', 'Deletion Error');
+    });
+
+    it('should update a book by id', () => {
+        const mockBook = { title: 'Test Title', author: 'Test Author', year: 2022, id: 1 };
+        jest.spyOn(bookService, 'updateBookById').mockReturnValue(mockBook);
+
+        updateBookHandler(1, mockBook);
+
+        expect(logSpy).toHaveBeenCalledWith('Book updated successfully:', mockBook);
+    });
+
+    it('should log not found message if book to update is not found', () => {
+        jest.spyOn(bookService, 'updateBookById').mockReturnValue(null);
+    
+        updateBookHandler(999, { title: 'Test Title', author: 'Test Author', year: 2022 });
+    
+        expect(logSpy).toHaveBeenCalledWith('Book not found, nothing to update.');
     });
 });

@@ -1,4 +1,4 @@
-import { createBook, listBooks, findBookByTitle, deleteBookById } from '../service/bookService.js';
+import { createBook, listBooks, findBookByTitle, deleteBookById, updateBookById } from '../service/bookService.js';
 
 export function createBookHandler(data) {
     try {
@@ -33,5 +33,18 @@ export function deleteBookHandler(id) {
         console.log('Book deleted successfully:', deletedBook);
     } catch (error) {
         console.error('Error deleting book:', error.message);
+    }
+};
+
+export function updateBookHandler(id, data) {
+    try {
+        const updatedBook = updateBookById(id, data);
+        if (!updatedBook) {
+            console.log('Book not found, nothing to update.');
+            return;
+        }
+        console.log('Book updated successfully:', updatedBook);
+    } catch (error) {
+        console.error('Error updating book:', error.message);
     }
 };

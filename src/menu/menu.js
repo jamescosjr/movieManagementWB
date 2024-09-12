@@ -1,5 +1,5 @@
 import promptSync from 'prompt-sync';
-import { createBook, listBooks, findBookByTitle, deleteBook } from './menuActions.js';
+import { createBook, listBooks, findBookByTitle, deleteBook, updateBook } from './menuActions.js';
 
 const prompt = promptSync({ sigint: true });
 
@@ -8,6 +8,7 @@ export function showMenu() {
     console.log('2. List Books');
     console.log('3. Find Book by Title');
     console.log('4. Delete Book');
+    console.log('5. Update Book');
     console.log('0. Exit');
 };
 
@@ -24,6 +25,9 @@ export function handleMenuOption(option) {
             break;
         case 4:
             deleteBook();
+            break;
+        case 5:
+            updateBook();
             break;
         case 0:
             console.log('Exiting...');

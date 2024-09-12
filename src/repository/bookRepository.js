@@ -21,3 +21,12 @@ export function deleteById(id) {
     }
     return null;
 };
+
+export function updateById(id, data) {
+    const index = books.findIndex(book => book.id === id);
+    if (index !== -1) {
+        books[index] = { ...books[index], ...data };
+        return books[index];
+    }
+    return null;
+}

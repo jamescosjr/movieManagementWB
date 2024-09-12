@@ -1,4 +1,4 @@
-import { createBook, listBooks, findBookByTitle, deleteBookById } from '../../service/bookService.js';
+import { createBook, listBooks, findBookByTitle, deleteBookById, updateBookById } from '../../service/bookService.js';
 import * as bookRepository from '../../repository/bookRepository.js';
 
 jest.mock('../../repository/bookRepository.js');
@@ -51,5 +51,24 @@ describe('Book Service', () => {
 
         expect(result).toEqual(mockBook);
         expect(bookRepository.deleteById).toHaveBeenCalledWith('123');
+    });
+
+    it('should return null if book to update is not found', () => {
+        bookRepository.updateById.mockReturnValue(null);
+
+        const result = updateBookById('999', { title: 'Test Title', author: 'Test Author', year: 2022 });
+
+        expect(result).toBeNull();
+        expect(bookRepository.updateById).toHaveBeenCalledWith('999', { title: 'Test Title', author: 'Test Author', year: 2022 });
+    });
+
+    it('should update a book by id', () => {
+        const mockBook = { title: 'Test Title', author: 'Test Author', year: 2022, id: '123' };
+        bookRepository.updateById.mockReturnValue(mockBook);
+
+        const result = updateBookById('123', { title: 'Test Title', author: 'Test Author', year: 2022 });
+
+        expect(result).toEqual(mockBook);
+        expect(bookRepository.updateById).toHaveBeenCalledWith('123', { title: 'Test Title', author: 'Test Author', year: 2022 });
     });
 });
