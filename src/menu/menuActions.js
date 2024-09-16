@@ -1,42 +1,69 @@
 import promptSync from 'prompt-sync';
-import { createBookHandler, listBooksHandler, findBookByTitleHandler, deleteBookHandler, updateBookHandler } from '../controllers/bookController.js';
+import { 
+    registerMovieHandler,
+    listMoviesHandler,
+    findMovieByTitleHandler,
+    listMoviesbyGenreHandler,
+    listMoviesByDirectorHandler, 
+    listMoviesByYearHandler,
+    deleteMovieHandler,
+    updateMovieHandler 
+} from '../controllers/movieController.js';
 
 
 const prompt = promptSync({ sigint: true });
 
-export function createBook() {
-    const title = prompt('Enter the book title: ');
-    const author = prompt('Enter the book author: ');
-    const year = parseInt(prompt('Enter the book year: '), 10);
+export function registerMovie() {
+    const title = prompt('Enter the movie title: ');
+    const director = prompt('Enter the movie director: ');
+    const year = parseInt(prompt('Enter the movie year: '), 10);
+    const genre = prompt('Enter the movie genre: ');
 
-    createBookHandler({ title, author, year });
+    registerMovieHandler({ title, director, year, genre });
 };
 
-export function listBooks() {
-    listBooksHandler();
+export function listMovies() {
+    listMoviesHandler();
 };
 
-export function findBookByTitle() {
-    const title = prompt('Enter the book title to search: ');
-    findBookByTitleHandler(title);
+export function findMovieByTitle() {
+    const title = prompt('Enter the movie title to search: ');
+    findMovieByTitleHandler(title);
 };
 
-export function deleteBook() {
-    const id = prompt('Enter the book ID to delete: ');
-    deleteBookHandler(id);
+export function listMoviesByGenre() {
+    const genre = prompt('Enter the genre to search: ');
+    listMoviesbyGenreHandler(genre);
+}
+
+export function listMoviesByDirector() {
+    const director = prompt('Enter the director to search: ');
+    listMoviesByDirectorHandler(director);
+}
+
+export function listMoviesByYear() {
+    const year = parseInt(prompt('Enter the year to search: '), 10);
+    listMoviesByYearHandler(year);
+}
+
+export function deleteMovie() {
+    const id = prompt('Enter the movie ID to delete: ');
+    deleteMovieHandler(id);
 };
 
-export function updateBook() {
-    const id = prompt('Enter the book ID to update: ');
-    const title = prompt('Enter the book title: ');
-    const author = prompt('Enter the book author: ');
-    const year = parseInt(prompt('Enter the book year: '), 10);
+export function updateMovie() {
+    const id = prompt('Enter the movie ID to update: ');
+    const title = prompt('Enter the movie title: ');
+    const director = prompt('Enter the movie director: ');
+    const year = parseInt(prompt('Enter the movie year: '), 10);
+    const genre = prompt('Enter the movie genre: ');
 
-    const updatedBook = {};
+    const updatedMovie = {};
 
-    if (title) updatedBook.title = title;
-    if (author) updatedBook.author = author;
-    if (year) updatedBook.year = year;
+    if (title) updatedMovie.title = title;
+    if (director) updatedMovie.director = director;
+    if (year) updatedMovie.year = year;
+    if (genre) updatedMovie.genre = genre;
 
-    updateBookHandler(id, updatedBook);
+    updateMovieHandler(id, updatedMovie);
 }

@@ -1,33 +1,54 @@
 import promptSync from 'prompt-sync';
-import { createBook, listBooks, findBookByTitle, deleteBook, updateBook } from './menuActions.js';
+import { 
+    registerMovie, 
+    findMovieByTitle, 
+    listMovies, 
+    listMoviesByDirector, 
+    listMoviesByGenre, 
+    listMoviesByYear, 
+    updateMovie, 
+    deleteMovie 
+} from './menuActions.js';
 
 const prompt = promptSync({ sigint: true });
 
 export function showMenu() {
-    console.log('1. Create Book');
-    console.log('2. List Books');
-    console.log('3. Find Book by Title');
-    console.log('4. Delete Book');
-    console.log('5. Update Book');
+    console.log('1. Register Movie');
+    console.log('2. List Movies');
+    console.log('3. Find Movie by Title');
+    console.log('4. List Movies by Genre');
+    console.log('5. List Movies by Director');
+    console.log('6. List Movies by Year');
+    console.log('7. Delete Movie');
+    console.log('8. Update Movie');
     console.log('0. Exit');
 };
 
 export function handleMenuOption(option) {
     switch (option) {
         case 1:
-            createBook();
+            registerMovie();
             break;
         case 2:
-            listBooks();
+            listMovies();
             break;
         case 3:
-            findBookByTitle();
+            findMovieByTitle();
             break;
         case 4:
-            deleteBook();
+            listMoviesByGenre();
             break;
         case 5:
-            updateBook();
+            listMoviesByDirector();
+            break;
+        case 6:
+            listMoviesByYear();
+            break;
+        case 7:
+            deleteMovie();
+            break;
+        case 8:
+            updateMovie();
             break;
         case 0:
             console.log('Exiting...');

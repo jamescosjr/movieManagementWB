@@ -1,5 +1,14 @@
-import { createBookHandler, listBooksHandler, findBookByTitleHandler, deleteBookHandler, updateBookHandler } from '../../controllers/bookController.js';
-import * as bookService from '../../service/bookService.js';
+import {
+    registerMovieHandler,
+    listMoviesHandler,
+    findMovieByTitleHandler,
+    listMoviesbyGenreHandler,
+    listMoviesByDirectorHandler,
+    listMoviesByYearHandler,
+    deleteMovieHandler,
+    updateMovieHandler 
+ } from '../../controllers/movieController.js';
+import * as movieService from '../../service/movieService.js';
 
 const logSpy = jest.spyOn(console, 'log').mockImplementation();
 const errorSpy = jest.spyOn(console, 'error').mockImplementation();
@@ -8,93 +17,138 @@ afterEach(() => {
     jest.clearAllMocks();
 });
 
-describe('Book Handlers', () => {
-    it('should log success message when creating a book', () => {
-        const mockBook = { title: 'Test Title', author: 'Test Author', year: 2022 };
-        jest.spyOn(bookService, 'createBook').mockReturnValue(mockBook);
+describe('Movie Handlers', () => {
+    it('should log success message when registering a movie', () => {
+        const mockMovie = { title: 'Test Title', director: 'Test Director', year: 2022, genre: 'Test Genre' };
+        jest.spyOn(movieService, 'registerMovie').mockReturnValue(mockMovie);
 
-        createBookHandler(mockBook);
+        registerMovieHandler(mockMovie);
 
-        expect(logSpy).toHaveBeenCalledWith('Book created successfully:', mockBook);
+        expect(logSpy).toHaveBeenCalledWith('Movie registered successfully:', mockMovie);
     });   
 
-    it('should log error message when creating a book fails', () => {
-        jest.spyOn(bookService, 'createBook').mockImplementation(() => {
+    it('should log error message when registering a movie fails', () => {
+        jest.spyOn(movieService, 'registerMovie').mockImplementation(() => {
             throw new Error('Creation Error');
         });
 
-        createBookHandler({ title: 'Test Title', author: 'Test Author', year: 2022 });
+        registerMovieHandler({ title: 'Test Title', director: 'Test director', year: 2022, genre: 'Test Genre' });
 
-        expect(errorSpy).toHaveBeenCalledWith('Error creating book:', 'Creation Error');
+        expect(errorSpy).toHaveBeenCalledWith('Error registering movie:', 'Creation Error');
     });
 
-    it('should list all books', () => {
-        const mockBooks = [{ title: 'Test Title', author: 'Test Author', year: 2022 }];
-        jest.spyOn(bookService, 'listBooks').mockReturnValue(mockBooks);
+    it('should list all movies', () => {
+        const mockMovies = [{ title: 'Test Title', director: 'Test director', year: 2022, genre: 'Test Genre' }];
+        jest.spyOn(movieService, 'listMovies').mockReturnValue(mockMovies);
     
-        listBooksHandler();
+        listMoviesHandler();
     
-        expect(logSpy).toHaveBeenCalledWith('Books:', mockBooks);
+        expect(logSpy).toHaveBeenCalledWith('Movies:', mockMovies);
     });
 
-    it('should find a book by title', () => {
-        const mockBook = { title: 'Test Title', author: 'Test Author', year: 2022 };
-        jest.spyOn(bookService, 'findBookByTitle').mockReturnValue(mockBook);
+    it('should find a movie by title', () => {
+        const mockMovie = { title: 'Test Title', director: 'Test director', year: 2022, genre: 'Test Genre' };
+        jest.spyOn(movieService, 'findMovieByTitle').mockReturnValue(mockMovie);
     
-        findBookByTitleHandler('Test Title');
+        findMovieByTitleHandler('Test Title');
     
-        expect(logSpy).toHaveBeenCalledWith('Book found:', mockBook);
+        expect(logSpy).toHaveBeenCalledWith('Movie found:', mockMovie);
     });
     
-    it('should log not found message if book is not found', () => {
-        jest.spyOn(bookService, 'findBookByTitle').mockReturnValue(null);
+    it('should log not found message if movie is not found', () => {
+        jest.spyOn(movieService, 'findMovieByTitle').mockReturnValue(null);
     
-        findBookByTitleHandler('Nonexistent Title');
+        findMovieByTitleHandler('Nonexistent Title');
     
-        expect(logSpy).toHaveBeenCalledWith('Book not found');
-    });
-    
-    it('should delete a book by id', () => {
-        const mockBook = { title: 'Test Title', author: 'Test Author', year: 2022, id: 1 };
-        jest.spyOn(bookService, 'deleteBookById').mockReturnValue(mockBook);
-
-        deleteBookHandler(1);
-
-        expect(logSpy).toHaveBeenCalledWith('Book deleted successfully:', mockBook);
+        expect(logSpy).toHaveBeenCalledWith('Movie not found');
     });
 
-    it('should log not found message if book to delete is not found', () => {
-        jest.spyOn(bookService, 'deleteBookById').mockReturnValue(null);
+    it('should list movies by genre', () => {
+        const mockMovies = [{ title: 'Test Title', director: 'Test director', year: 2022, genre: 'Test Genre' }];
+        jest.spyOn(movieService, 'listMoviesByGenre').mockReturnValue(mockMovies);  
+    });
+
+    it('should list movies by director', () => {
+        const mockMovies = [{ title: 'Test Title', director: 'Test director', year: 2022, genre: 'Test Genre' }];
+        jest.spyOn(movieService, 'listMoviesByDirector').mockReturnValue(mockMovies);
+    });
+
+    it('should list movies by year', () => {
+        const mockMovies = [{ title: 'Test Title', director: 'Test director', year: 2022, genre: 'Test Genre' }];
+        jest.spyOn(movieService, 'listMoviesByYear').mockReturnValue(mockMovies);
+    });
+
+    it('should log error message when listing movies by genre fails', () => {
+        jest.spyOn(movieService, 'listMoviesByGenre').mockImplementation(() => {
+            throw new Error('Movie not found');
+        });
     
-        deleteBookHandler(999);
+        listMoviesbyGenreHandler('Test Genre');
     
-        expect(logSpy).toHaveBeenCalledWith('Book not found, nothing to delete.');
+        expect(errorSpy).toHaveBeenCalledWith('Error listing movies by genre:', 'Movie not found');
+    });
+
+    it('should log error message when listing movies by director fails', () => {
+        jest.spyOn(movieService, 'listMoviesByDirector').mockImplementation(() => {
+            throw new Error('Movie not found');
+        });
+    
+        listMoviesByDirectorHandler('Test Director');
+    
+        expect(errorSpy).toHaveBeenCalledWith('Error listing movies by director:', 'Movie not found');
+    });
+
+    it('should log error message when listing movies by year fails', () => {
+        jest.spyOn(movieService, 'listMoviesByYear').mockImplementation(() => {
+            throw new Error('Movie not found');
+        });
+    
+        listMoviesByYearHandler(2022);
+    
+        expect(errorSpy).toHaveBeenCalledWith('Error listing movies by year:', 'Movie not found');
     });
     
-    it('should log error message when deleting a book fails', () => {
-        jest.spyOn(bookService, 'deleteBookById').mockImplementation(() => {
+    it('should delete a movie by id', () => {
+        const mockMovie = { title: 'Test Title', director: 'Test director', year: 2022, genre: 'Teste Genre', id: 1 };
+        jest.spyOn(movieService, 'deleteMovieById').mockReturnValue(mockMovie);
+
+        deleteMovieHandler(1);
+
+        expect(logSpy).toHaveBeenCalledWith('Movie deleted successfully:', mockMovie);
+    });
+
+    it('should log not found message if movie to delete is not found', () => {
+        jest.spyOn(movieService, 'deleteMovieById').mockReturnValue(null);
+    
+        deleteMovieHandler(999);
+    
+        expect(logSpy).toHaveBeenCalledWith('Movie not found, nothing to delete.');
+    });
+    
+    it('should log error message when deleting a movie fails', () => {
+        jest.spyOn(movieService, 'deleteMovieById').mockImplementation(() => {
             throw new Error('Deletion Error');
         });
     
-        deleteBookHandler(1);
+        deleteMovieHandler(1);
     
-        expect(errorSpy).toHaveBeenCalledWith('Error deleting book:', 'Deletion Error');
+        expect(errorSpy).toHaveBeenCalledWith('Error deleting movie:', 'Deletion Error');
     });
 
-    it('should update a book by id', () => {
-        const mockBook = { title: 'Test Title', author: 'Test Author', year: 2022, id: 1 };
-        jest.spyOn(bookService, 'updateBookById').mockReturnValue(mockBook);
+    it('should update a movie by id', () => {
+        const mockMovie = { title: 'Test Title', director: 'Test director', year: 2022, genre: 'Teste Genre', id: 1 };
+        jest.spyOn(movieService, 'updateMovieById').mockReturnValue(mockMovie);
 
-        updateBookHandler(1, mockBook);
+        updateMovieHandler(1, mockMovie);
 
-        expect(logSpy).toHaveBeenCalledWith('Book updated successfully:', mockBook);
+        expect(logSpy).toHaveBeenCalledWith('Movie updated successfully:', mockMovie);
     });
 
-    it('should log not found message if book to update is not found', () => {
-        jest.spyOn(bookService, 'updateBookById').mockReturnValue(null);
+    it('should log not found message if movie to update is not found', () => {
+        jest.spyOn(movieService, 'updateMovieById').mockReturnValue(null);
     
-        updateBookHandler(999, { title: 'Test Title', author: 'Test Author', year: 2022 });
+        updateMovieHandler(999, { title: 'Test Title', director: 'Test director', year: 2022, genre: 'Test Genre' });
     
-        expect(logSpy).toHaveBeenCalledWith('Book not found, nothing to update.');
+        expect(logSpy).toHaveBeenCalledWith('Movie not found, nothing to update.');
     });
 });
