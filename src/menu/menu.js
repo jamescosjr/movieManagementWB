@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import promptSync from 'prompt-sync';
 import { 
     registerMovie, 
@@ -53,6 +54,7 @@ export function handleMenuOption(option) {
         case 0:
             console.log('Exiting...');
             process.exit();
+        // eslint-disable-next-line no-fallthrough
         default:
             console.log('Invalid option, please try again.');
     }

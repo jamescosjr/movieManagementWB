@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { registerMovie, listMovies, findMovieByTitle, deleteMovieById, updateMovieById, listMoviesByDirector, listMoviesByYear, listMoviesByGenre } from '../../service/movieService.js';
 import * as movieRepository from '../../repository/movieRepository.js';
 

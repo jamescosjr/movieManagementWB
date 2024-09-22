@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import {
     register,
     findAll,
@@ -28,6 +29,7 @@ describe('Movie Repository', () => {
         expect(registeredMovie).toMatchObject(movieData);
         expect(typeof registeredMovie.id).toEqual(expect.any(String));
         expect(findAll()).toContainEqual(registeredMovie);
+        expect(id).toBe(registeredMovie.id);
     });
 
     it('should find all movies', () => {
@@ -60,7 +62,9 @@ describe('Movie Repository', () => {
         const movie2 = register({ title: 'Title 2', director: 'director 2', year: 2022, genre: 'genre 2' });
 
         const moviesByGenre = listByGenre('genre 1');
+        const moviesByGenre2 = listByGenre('genre 2');
 
+        expect(moviesByGenre2).toEqual([movie2]);
         expect(moviesByGenre).toEqual([movie1]);
     });
 
@@ -70,8 +74,10 @@ describe('Movie Repository', () => {
         const movie2 = register({ title: 'Title 2', director: 'director 2', year: 2022, genre: 'genre 2' });
 
         const moviesByDirector = listByDirector('director 2');
+        const moviesByDirector2 = listByDirector('director 1');
 
         expect(moviesByDirector).toEqual([movie2]);
+        expect(moviesByDirector2).toEqual([movie1]);
     });
 
     it('should list movies by year', () => {
@@ -80,8 +86,10 @@ describe('Movie Repository', () => {
         const movie2 = register({ title: 'Title 2', director: 'director 2', year: 2022, genre: 'genre 2' });
 
         const moviesByYear = listByYear(2021);
+        const moviesByYear2 = listByYear(2022);
 
         expect(moviesByYear).toEqual([movie1]);
+        expect(moviesByYear2).toEqual([movie2]);
     });
 
     it('should return an empty array when listing movies by a non-existing year', () => {
