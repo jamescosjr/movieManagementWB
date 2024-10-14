@@ -1,155 +1,472 @@
 /* eslint-disable no-undef */
 import {
-    registerMovieHandler,
-    listMoviesHandler,
-    findMovieByTitleHandler,
-    listMoviesbyGenreHandler,
-    listMoviesByDirectorHandler,
-    listMoviesByYearHandler,
-    deleteMovieHandler,
-    updateMovieHandler 
- } from '../../controllers/movieController.js';
-import * as movieService from '../../service/movieService.js';
+  registerMovieHandler,
+  listMoviesHandler,
+  findMovieByTitleHandler,
+  listMoviesbyGenreHandler,
+  listMoviesByDirectorHandler,
+  listMoviesByYearHandler,
+  deleteMovieHandler,
+  updateMovieHandler,
+} from "../../controllers/movieController.js";
+import * as movieRepository from "../../repository/movieRepository.js";
 
-const logSpy = jest.spyOn(console, 'log').mockImplementation();
-const errorSpy = jest.spyOn(console, 'error').mockImplementation();
-
-afterEach(() => {
+describe("Movie Controller", () => {
+  afterEach(() => {
     jest.clearAllMocks();
-});
+  });
 
-describe('Movie Handlers', () => {
-    it('should log success message when registering a movie', () => {
-        const mockMovie = { title: 'Test Title', director: 'Test Director', year: 2022, genre: 'Test Genre' };
-        jest.spyOn(movieService, 'registerMovie').mockReturnValue(mockMovie);
+  it("should test the registerMovieHandler", async () => {
+    const req = {
+      body: {
+        title: "The Godfather",
+        director: "Francis Ford Coppola",
+        genre: "Crime",
+        year: 1972,
+      },
+    };
 
-        registerMovieHandler(mockMovie);
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
 
-        expect(logSpy).toHaveBeenCalledWith('Movie registered successfully:', mockMovie);
-    });   
+    const spy = jest
+      .spyOn(movieRepository, "register")
+      .mockReturnValue(req.body);
 
-    it('should log error message when registering a movie fails', () => {
-        jest.spyOn(movieService, 'registerMovie').mockImplementation(() => {
-            throw new Error('Creation Error');
-        });
+    await registerMovieHandler(req, res);
 
-        registerMovieHandler({ title: 'Test Title', director: 'Test director', year: 2022, genre: 'Test Genre' });
+    expect(spy).toHaveBeenCalledWith(req.body);
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.json).toHaveBeenCalledWith(req.body);
+  });
 
-        expect(errorSpy).toHaveBeenCalledWith('Error registering movie:', 'Creation Error');
+  it("should test the listMoviesHandler", async () => {
+    const req = {};
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    const movies = [
+      {
+        title: "The Godfather",
+        director: "Francis Ford Coppola",
+        genre: "Crime",
+        year: 1972,
+      },
+    ];
+
+    const spy = jest.spyOn(movieRepository, "findAll").mockReturnValue(movies);
+
+    await listMoviesHandler(req, res);
+
+    expect(spy).toHaveBeenCalled();
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith(movies);
+  });
+
+  it("should test the findMovieByTitleHandler", async () => {
+    const req = {
+      params: {
+        title: "The Godfather",
+      },
+    };
+
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    const movie = {
+      title: "The Godfather",
+      director: "Francis Ford Coppola",
+      genre: "Crime",
+      year: 1972,
+    };
+
+    const spy = jest
+      .spyOn(movieRepository, "findByTitle")
+      .mockReturnValue(movie);
+
+    await findMovieByTitleHandler(req, res);
+
+    expect(spy).toHaveBeenCalledWith(req.params.title);
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith(movie);
+  });
+
+  it("should test the listMoviesbyGenreHandler", async () => {
+    const req = {
+      params: {
+        genre: "Crime",
+      },
+    };
+
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    const movies = [
+      {
+        title: "The Godfather",
+        director: "Francis Ford Coppola",
+        genre: "Crime",
+        year: 1972,
+      },
+    ];
+
+    const spy = jest
+      .spyOn(movieRepository, "listByGenre")
+      .mockReturnValue(movies);
+
+    await listMoviesbyGenreHandler(req, res);
+
+    expect(spy).toHaveBeenCalledWith(req.params.genre);
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith(movies);
+  });
+
+  it("should test the listMoviesByDirectorHandler", async () => {
+    const req = {
+      params: {
+        director: "Francis Ford Coppola",
+      },
+    };
+
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    const movies = [
+      {
+        title: "The Godfather",
+        director: "Francis Ford Coppola",
+        genre: "Crime",
+        year: 1972,
+      },
+    ];
+
+    const spy = jest
+      .spyOn(movieRepository, "listByDirector")
+      .mockReturnValue(movies);
+
+    await listMoviesByDirectorHandler(req, res);
+
+    expect(spy).toHaveBeenCalledWith(req.params.director);
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith(movies);
+  });
+
+  it("should test the listMoviesByYearHandler", async () => {
+    const req = {
+      params: {
+        year: 1972,
+      },
+    };
+
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    const movies = [
+      {
+        title: "The Godfather",
+        director: "Francis Ford Coppola",
+        genre: "Crime",
+        year: 1972,
+      },
+    ];
+
+    const spy = jest
+      .spyOn(movieRepository, "listByYear")
+      .mockReturnValue(movies);
+
+    await listMoviesByYearHandler(req, res);
+
+    expect(spy).toHaveBeenCalledWith(req.params.year);
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith(movies);
+  });
+
+  it("should test the deleteMovieHandler", async () => {
+    const req = {
+      params: {
+        id: "some-uuid-id",
+      },
+    };
+
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    const spy = jest
+      .spyOn(movieRepository, "deleteById")
+      .mockReturnValue({ id: req.params.id, title: "Some Movie" });
+
+    await deleteMovieHandler(req, res);
+
+    expect(spy).toHaveBeenCalledWith(req.params.id);
+    expect(res.status).toHaveBeenCalledWith(204);
+    expect(res.json).toHaveBeenCalled();
+  });
+
+  it("should test the updateMovieHandler", async () => {
+    const req = {
+      params: {
+        id: "some-uuid-id",
+      },
+      body: {
+        title: "The Godfather",
+        director: "Francis Ford Coppola",
+        genre: "Crime",
+        year: 1972,
+      },
+    };
+
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    const spy = jest
+      .spyOn(movieRepository, "updateById")
+      .mockReturnValue({ id: req.params.id, ...req.body });
+
+    await updateMovieHandler(req, res);
+
+    expect(spy).toHaveBeenCalledWith(req.params.id, req.body);
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({ id: req.params.id, ...req.body });
+  });
+
+  it("should test the updateMovieHandler when movie is not found", async () => {
+    const req = {
+      params: {
+        id: "some-uuid-id",
+      },
+      body: {
+        title: "The Godfather",
+        director: "Francis Ford Coppola",
+        genre: "Crime",
+        year: 1972,
+      },
+    };
+
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    const spy = jest.spyOn(movieRepository, "updateById").mockReturnValue(null);
+
+    await updateMovieHandler(req, res);
+
+    expect(spy).toHaveBeenCalledWith(req.params.id, req.body);
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({ message: "Movie not found" });
+  });
+
+  it("should test the listMoviesByYearHandler when year is not found", async () => {
+    const req = {
+      params: {
+        year: 2020,
+      },
+    };
+
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    const spy = jest.spyOn(movieRepository, "listByYear").mockReturnValue([]);
+
+    await listMoviesByYearHandler(req, res);
+
+    expect(spy).toHaveBeenCalledWith(req.params.year);
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({ message: "Year not found" });
+  });
+
+  it("should test the listMoviesByDirectorHandler when director is not found", async () => {
+    const req = {
+      params: {
+        director: "Some Director",
+      },
+    };
+
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    const spy = jest.spyOn(movieRepository, "listByDirector").mockReturnValue([]);
+
+    await listMoviesByDirectorHandler(req, res);
+
+    expect(spy).toHaveBeenCalledWith(req.params.director);
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({ message: "Director not found" });
+  });
+
+  it("should test the findMovieByTitleHandler when movie is not found", async () => {
+    const req = {
+      params: {
+        title: "The Godfather",
+      },
+    };
+
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    const spy = jest.spyOn(movieRepository, "findByTitle").mockReturnValue(null);
+
+    await findMovieByTitleHandler(req, res);
+
+    expect(spy).toHaveBeenCalledWith(req.params.title);
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({ message: "Movie not found" });
+  });
+
+  it("should test the listMoviesbyGenreHandler when genre is not found", async () => {
+    const req = {
+      params: {
+        genre: "Some Genre",
+      },
+    };
+
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    const spy = jest.spyOn(movieRepository, "listByGenre").mockReturnValue([]);
+
+    await listMoviesbyGenreHandler(req, res);
+
+    expect(spy).toHaveBeenCalledWith(req.params.genre);
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({ message: "Genre not found" });
+  });
+
+  it("should test the registerMovieHandler when an error occurs", async () => {
+    const req = {
+      body: {
+        title: "The Godfather",
+        director: "Francis Ford Coppola",
+        genre: "Crime",
+        year: 1972,
+      },
+    };
+
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    jest.spyOn(movieRepository, "register").mockImplementation(() => {
+      throw new Error("Internal Server Error");
     });
 
-    it('should list all movies', () => {
-        const mockMovies = [{ title: 'Test Title', director: 'Test director', year: 2022, genre: 'Test Genre' }];
-        jest.spyOn(movieService, 'listMovies').mockReturnValue(mockMovies);
-    
-        listMoviesHandler();
-    
-        expect(logSpy).toHaveBeenCalledWith('Movies:', mockMovies);
+    await registerMovieHandler(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ message: "Internal Server Error" });
+  });
+
+  it("should test the listMoviesHandler when an error occurs", async () => {
+    const req = {};
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    jest.spyOn(movieRepository, "findAll").mockImplementation(() => {
+      throw new Error("Internal Server Error");
     });
 
-    it('should find a movie by title', () => {
-        const mockMovie = { title: 'Test Title', director: 'Test director', year: 2022, genre: 'Test Genre' };
-        jest.spyOn(movieService, 'findMovieByTitle').mockReturnValue(mockMovie);
-    
-        findMovieByTitleHandler('Test Title');
-    
-        expect(logSpy).toHaveBeenCalledWith('Movie found:', mockMovie);
-    });
-    
-    it('should log not found message if movie is not found', () => {
-        jest.spyOn(movieService, 'findMovieByTitle').mockReturnValue(null);
-    
-        findMovieByTitleHandler('Nonexistent Title');
-    
-        expect(logSpy).toHaveBeenCalledWith('Movie not found');
-    });
+    await listMoviesHandler(req, res);
 
-    it('should list movies by genre', () => {
-        const mockMovies = [{ title: 'Test Title', director: 'Test director', year: 2022, genre: 'Test Genre' }];
-        jest.spyOn(movieService, 'listMoviesByGenre').mockReturnValue(mockMovies);  
-    });
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ message: "Internal Server Error" });
+  });
 
-    it('should list movies by director', () => {
-        const mockMovies = [{ title: 'Test Title', director: 'Test director', year: 2022, genre: 'Test Genre' }];
-        jest.spyOn(movieService, 'listMoviesByDirector').mockReturnValue(mockMovies);
+  it("should test the deleteMovieHandler when an error occurs", async () => {
+    const req = {
+      params: {
+        id: "some-uuid-id",
+      },
+    };
+
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    jest.spyOn(movieRepository, "deleteById").mockImplementation(() => {
+      throw new Error("Internal Server Error");
     });
 
-    it('should list movies by year', () => {
-        const mockMovies = [{ title: 'Test Title', director: 'Test director', year: 2022, genre: 'Test Genre' }];
-        jest.spyOn(movieService, 'listMoviesByYear').mockReturnValue(mockMovies);
+    await deleteMovieHandler(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ message: "Internal Server Error" });
+  });
+
+  it("should test the updateMovieHandler when an error occurs", async () => {
+    const req = {
+      params: {
+        id: "some-uuid-id",
+      },
+      body: {
+        title: "The Godfather",
+        director: "Francis Ford Coppola",
+        genre: "Crime",
+        year: 1972,
+      },
+    };
+
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    jest.spyOn(movieRepository, "updateById").mockImplementation(() => {
+      throw new Error("Internal Server Error");
     });
 
-    it('should log error message when listing movies by genre fails', () => {
-        jest.spyOn(movieService, 'listMoviesByGenre').mockImplementation(() => {
-            throw new Error('Movie not found');
-        });
-    
-        listMoviesbyGenreHandler('Test Genre');
-    
-        expect(errorSpy).toHaveBeenCalledWith('Error listing movies by genre:', 'Movie not found');
+    await updateMovieHandler(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ message: "Internal Server Error" });
+  });
+
+  it("should test the listMoviesByYearHandler when an error occurs", async () => {
+    const req = {
+      params: {
+        year: 1972,
+      },
+    };
+
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    jest.spyOn(movieRepository, "listByYear").mockImplementation(() => {
+      throw new Error("Internal Server Error");
     });
 
-    it('should log error message when listing movies by director fails', () => {
-        jest.spyOn(movieService, 'listMoviesByDirector').mockImplementation(() => {
-            throw new Error('Movie not found');
-        });
-    
-        listMoviesByDirectorHandler('Test Director');
-    
-        expect(errorSpy).toHaveBeenCalledWith('Error listing movies by director:', 'Movie not found');
-    });
+    await listMoviesByYearHandler(req, res);
 
-    it('should log error message when listing movies by year fails', () => {
-        jest.spyOn(movieService, 'listMoviesByYear').mockImplementation(() => {
-            throw new Error('Movie not found');
-        });
-    
-        listMoviesByYearHandler(2022);
-    
-        expect(errorSpy).toHaveBeenCalledWith('Error listing movies by year:', 'Movie not found');
-    });
-    
-    it('should delete a movie by id', () => {
-        const mockMovie = { title: 'Test Title', director: 'Test director', year: 2022, genre: 'Teste Genre', id: 1 };
-        jest.spyOn(movieService, 'deleteMovieById').mockReturnValue(mockMovie);
-
-        deleteMovieHandler(1);
-
-        expect(logSpy).toHaveBeenCalledWith('Movie deleted successfully:', mockMovie);
-    });
-
-    it('should log not found message if movie to delete is not found', () => {
-        jest.spyOn(movieService, 'deleteMovieById').mockReturnValue(null);
-    
-        deleteMovieHandler(999);
-    
-        expect(logSpy).toHaveBeenCalledWith('Movie not found, nothing to delete.');
-    });
-    
-    it('should log error message when deleting a movie fails', () => {
-        jest.spyOn(movieService, 'deleteMovieById').mockImplementation(() => {
-            throw new Error('Deletion Error');
-        });
-    
-        deleteMovieHandler(1);
-    
-        expect(errorSpy).toHaveBeenCalledWith('Error deleting movie:', 'Deletion Error');
-    });
-
-    it('should update a movie by id', () => {
-        const mockMovie = { title: 'Test Title', director: 'Test director', year: 2022, genre: 'Teste Genre', id: 1 };
-        jest.spyOn(movieService, 'updateMovieById').mockReturnValue(mockMovie);
-
-        updateMovieHandler(1, mockMovie);
-
-        expect(logSpy).toHaveBeenCalledWith('Movie updated successfully:', mockMovie);
-    });
-
-    it('should log not found message if movie to update is not found', () => {
-        jest.spyOn(movieService, 'updateMovieById').mockReturnValue(null);
-    
-        updateMovieHandler(999, { title: 'Test Title', director: 'Test director', year: 2022, genre: 'Test Genre' });
-    
-        expect(logSpy).toHaveBeenCalledWith('Movie not found, nothing to update.');
-    });
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ message: "Internal Server Error" });
+  });
 });
