@@ -9,7 +9,7 @@ export const movieSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    gender: {
+    genre: {
         type: String,
         required: true,
     },
@@ -17,6 +17,6 @@ export const movieSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-})
+});
 
 export const Movie = mongoose.model("Movie", movieSchema);
