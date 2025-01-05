@@ -15,3 +15,11 @@ export async function findByTitle(title){
         next(error);
     }
 }
+
+export async function findByGenre(genre){
+    try{
+        return Movie.find({ genre })
+    } catch (error) {
+        next(error);
+    }
+}
