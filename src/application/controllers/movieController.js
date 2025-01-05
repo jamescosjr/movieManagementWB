@@ -3,7 +3,10 @@ import {
     updateMovieService,
     deleteMovieService,
   } from "../../domain/services/movieService.js";
-  import { getAllMoviesService } from "../../domain/services/movieService.js";
+  import { 
+    getAllMoviesService,
+    findByTitleService,
+ } from "../../domain/services/movieService.js";
   import { AppError, ValidationError, NotFoundError } from "../../domain/error/customErros.js";
   import { validMovieData } from "../../domain/utils/validation.js";
   
@@ -62,6 +65,20 @@ export async function deleteMovieHandler(req, res, next) {
 export async function getAllMoviesHandler(req, res, next) {
     try {
         const result = await getAllMoviesService();
+        res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+}
+
+export async function findMovieByTitleHandler(req, res, next) {
+    const { title } = req.query;
+
+    try {
+        const result = await findByTitleService(title);
+        if (!result.length) {
+            return next(new NotFoundError('Movie not found'));
+        }
         res.status(200).json(result);
     } catch (error) {
         next(error);
