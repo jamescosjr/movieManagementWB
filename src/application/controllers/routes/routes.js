@@ -4,7 +4,8 @@ import {
   updateMovieHandler,
   deleteMovieHandler,
   getAllMoviesHandler,
-  findMovieByTitleHandler
+  findMovieByTitleHandler,
+  listMoviesbyGenreHandler,
 } from "../movieController.js";
 
 const router = Router();
@@ -12,7 +13,7 @@ const router = Router();
 router.post("/movies", registerMovieHandler);
 router.get("/movies", getAllMoviesHandler);
 router.get("/movies/:title", findMovieByTitleHandler);
-// router.get("/movies/genre/:genre", listMoviesbyGenreHandler);
+router.get("/movies/genre/:genre", listMoviesbyGenreHandler);
 // router.get("/movies/director/:director", listMoviesByDirectorHandler);
 // router.get("/movies/year/:year", listMoviesByYearHandler);
 router.delete("/movies/:id", deleteMovieHandler);
