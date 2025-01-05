@@ -1,6 +1,7 @@
 import {
     createMovieService,
-    updateMovieService
+    updateMovieService,
+    deleteMovieService,
   } from "../../domain/services/movieService.js";
   import { AppError, ValidationError, NotFoundError } from "../../domain/error/customErros.js";
   import { validMovieData } from "../../domain/utils/validation.js";
@@ -37,6 +38,22 @@ export async function updateMovieHandler(req, res, next) {
         }
         res.status(200).json(result);
     } catch (error) {
+        next(error);
+    }
+}
+
+export async function deleteMovieHandler(req, res, next) {
+    const { id } = req.params;
+
+    try {
+        const result = await deleteMovieService(id);
+        if (!result) {
+            return next(new NotFoundError('Movie not found'));
+        }
+        res.status(204).end();
+    } catch (error) {
+        console.warn(error)
+
         next(error);
     }
 }
