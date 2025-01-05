@@ -7,7 +7,8 @@ import {
     getAllMoviesService,
     findByTitleService,
     findByGenreService,
-    findByDirectorService
+    findByDirectorService,
+    findByYearService,
  } from "../../domain/services/movieService.js";
   import { AppError, ValidationError, NotFoundError } from "../../domain/error/customErros.js";
   import { validMovieData } from "../../domain/utils/validation.js";
@@ -106,6 +107,20 @@ export async function listMoviesbyDirectorHandler(req, res, next) {
 
     try {
         const result = await findByDirectorService(director);
+        if (!result.length) {
+            return next(new NotFoundError('Movie not found'));
+        }
+        res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+}
+
+export async function listMoviesbyYearHandler(req, res, next) {
+    const { year } = req.params;
+
+    try {
+        const result = await findByYearService(year);
         if (!result.length) {
             return next(new NotFoundError('Movie not found'));
         }
