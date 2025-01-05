@@ -23,3 +23,11 @@ export async function findByGenre(genre){
         next(error);
     }
 }
+
+export async function findByDirector(director){
+    try{
+        return Movie.find({ director })
+    } catch (error) {
+        next(error);
+    }
+}
