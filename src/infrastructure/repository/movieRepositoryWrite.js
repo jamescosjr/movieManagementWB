@@ -22,3 +22,11 @@ export async function updateById(id, { title, director, genre, year }) {
         throw new AppError(error.message || 'Database error', 500);
     }
 }
+
+export async function deleteById(id){
+    try {
+        return await Movie.findByIdAndDelete(id, {lean: true});
+    } catch (error) {
+        throw new AppError(error.message || 'Database error', 500);
+    }
+}
