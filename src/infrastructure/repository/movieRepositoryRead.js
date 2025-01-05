@@ -31,3 +31,11 @@ export async function findByDirector(director){
         next(error);
     }
 }
+
+export async function findByYear(year){
+    try{
+        return Movie.find({ year })
+    } catch (error) {
+        next(error);
+    }
+}
