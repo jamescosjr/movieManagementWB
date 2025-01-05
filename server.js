@@ -1,7 +1,7 @@
 require("dotenv").config();
 import express from "express";
 import mongoose from "mongoose";
-import routes from "./src/application/controllers/routes.js";
+import routes from "./src/application/controllers/routes/routes.js";
 import errorHandler from "./src/application/middleware/errorHandler.js";
 
 export const app = express();
