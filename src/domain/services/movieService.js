@@ -8,6 +8,7 @@ import {
     findByTitle,
     findByGenre,
     findByDirector,
+    findByYear
  } from "../../infrastructure/repository/movieRepositoryRead.js";
 import { AppError } from '../error/customErros.js'
 
@@ -64,5 +65,13 @@ export async function findByDirectorService(director) {
         return await findByDirector(director);
     } catch (error) {
         throw new AppError(error.message || 'Error getting movie by director', 500);
+    }
+}
+
+export async function findByYearService(year) {
+    try {
+        return await findByYear(year);
+    } catch (error) {
+        throw new AppError(error.message || 'Error getting movie by year', 500);
     }
 }
