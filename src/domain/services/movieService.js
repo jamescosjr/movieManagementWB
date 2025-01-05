@@ -3,7 +3,10 @@ import {
     updateById,
     deleteById,
  } from "../../infrastructure/repository/movieRepositoryWrite.js";
-import { getAllMovies } from "../../infrastructure/repository/movieRepositoryRead.js";
+import { 
+    getAllMovies,
+    findByTitle,
+ } from "../../infrastructure/repository/movieRepositoryRead.js";
 import { AppError } from '../error/customErros.js'
 
 export async function createMovieService({ title, director, genre, year }) {
@@ -35,5 +38,13 @@ export async function getAllMoviesService() {
         return await getAllMovies();
     } catch (error) {
         throw new AppError(error.message || 'Error getting all movies', 500);
+    }
+}
+
+export async function findByTitleService(title) {
+    try {
+        return await findByTitle(title);
+    } catch (error) {
+        throw new AppError(error.message || 'Error getting movie by title', 500);
     }
 }
