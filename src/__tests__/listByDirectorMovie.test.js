@@ -42,7 +42,7 @@ describe("GET /movies/director/director", () => {
     });
     describe("non success cases", () => {
         it("should return 404 when the movie is not found", async () => {
-            const response = await supertest(app).get("/movies/genre/Test Director").query({ director: "Test Director" });
+            const response = await supertest(app).get("/movies/director/Test Director").query({ director: "Test Director" });
 
             expect(response.status).toBe(404);
             expect(response.body).toMatchObject({
