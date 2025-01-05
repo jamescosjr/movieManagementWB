@@ -6,6 +6,7 @@ import {
 import { 
     getAllMovies,
     findByTitle,
+    findByGenre,
  } from "../../infrastructure/repository/movieRepositoryRead.js";
 import { AppError } from '../error/customErros.js'
 
@@ -46,5 +47,13 @@ export async function findByTitleService(title) {
         return await findByTitle(title);
     } catch (error) {
         throw new AppError(error.message || 'Error getting movie by title', 500);
+    }
+}
+
+export async function findByGenreService(genre) {
+    try {
+        return await findByGenre(genre);
+    } catch (error) {
+        throw new AppError(error.message || 'Error getting movie by genre', 500);
     }
 }
