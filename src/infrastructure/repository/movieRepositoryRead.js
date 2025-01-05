@@ -7,3 +7,11 @@ export async function getAllMovies(){
         next(error);
     }
 }
+
+export async function findByTitle(title){
+    try{
+        return Movie.find({ title })
+    } catch (error) {
+        next(error);
+    }
+}
