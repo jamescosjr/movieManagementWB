@@ -1,4 +1,4 @@
-import { Movie } from "../schema/movieSchema";
+import { Movie } from "../schema/movieSchema.js";
 
 export async function getAllMovies(){
     try {

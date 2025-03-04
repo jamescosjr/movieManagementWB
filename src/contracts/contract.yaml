@@ -1,0 +1,224 @@
+openapi: 3.0.0
+info:
+  title: Movie Management API
+  version: 1.0.0
+paths:
+  /movies:
+    post:
+      summary: Register a new movie
+      operationId: registerMovie
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                director:
+                  type: string
+                genre:
+                  type: string
+                year:
+                  type: integer
+              required:
+                - title
+                - director
+                - genre
+                - year
+      responses:
+        '201':
+          description: Movie created successfully
+        '400':
+          description: Validation error
+    get:
+      summary: Get all movies
+      operationId: getAllMovies
+      responses:
+        '200':
+          description: A list of movies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                    director:
+                      type: string
+                    genre:
+                      type: string
+                    year:
+                      type: integer
+  /movies/{title}:
+    get:
+      summary: Find a movie by title
+      operationId: findMovieByTitle
+      parameters:
+        - name: title
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Movie found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  title:
+                    type: string
+                  director:
+                    type: string
+                  genre:
+                    type: string
+                  year:
+                    type: integer
+        '404':
+          description: Movie not found
+  /movies/genre/{genre}:
+    get:
+      summary: List movies by genre
+      operationId: listMoviesByGenre
+      parameters:
+        - name: genre
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Movies found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                    director:
+                      type: string
+                    genre:
+                      type: string
+                    year:
+                      type: integer
+        '404':
+          description: Movies not found
+  /movies/director/{director}:
+    get:
+      summary: List movies by director
+      operationId: listMoviesByDirector
+      parameters:
+        - name: director
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Movies found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                    director:
+                      type: string
+                    genre:
+                      type: string
+                    year:
+                      type: integer
+        '404':
+          description: Movies not found
+  /movies/year/{year}:
+    get:
+      summary: List movies by year
+      operationId: listMoviesByYear
+      parameters:
+        - name: year
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Movies found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                    director:
+                      type: string
+                    genre:
+                      type: string
+                    year:
+                      type: integer
+        '404':
+          description: Movies not found
+  /movies/{id}:
+    delete:
+      summary: Delete a movie
+      operationId: deleteMovie
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Movie deleted successfully
+        '404':
+          description: Movie not found
+    put:
+      summary: Update a movie
+      operationId: updateMovie
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                director:
+                  type: string
+                genre:
+                  type: string
+                year:
+                  type: integer
+              required:
+                - title
+                - director
+                - genre
+                - year
+      responses:
+        '200':
+          description: Movie updated successfully
+        '400':
+          description: Validation error
+        '404':
+          description: Movie not found
