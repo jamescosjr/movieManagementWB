@@ -37,7 +37,7 @@ describe("GET /movies", () => {
                 director: "Frank Darabont",
                 genre: "Drama",
                 year: 2000,
-                _id: "677aa30f88a6da644245cae7",
+                id: "677aa30f88a6da644245cae7",
                 __v: 0,
             }]);
         });

@@ -35,18 +35,26 @@ export async function deleteMovieService(id) {
         throw new AppError(error.message || 'Error deleting the movie', 500);
     }
 }
+
 export async function getAllMoviesService(page, limit) {
     try {
         const movies = await getAllMovies(page, limit);
 
-        movies.forEach(movie => {
-            if (movie._id !== undefined) {
-                movie.id = movie._id;
-                delete movie._id;
+        if (!movies || movies.length === 0) {
+            return [];
+        }
+
+        const formattedMovies = movies.map(movie => {
+            const movieObject = movie.toObject(); 
+            
+            if (movieObject && movieObject._id !== undefined) {
+                const { _id, ...rest } = movieObject;
+                return { ...rest, id: _id };
             }
+            return movieObject;
         });
 
-        return movies;
+        return formattedMovies;
     } catch (error) {
         throw new AppError(error.message || 'Error getting all movies', 500);
     }
