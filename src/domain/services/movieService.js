@@ -35,10 +35,18 @@ export async function deleteMovieService(id) {
         throw new AppError(error.message || 'Error deleting the movie', 500);
     }
 }
-
-export async function getAllMoviesService() {
+export async function getAllMoviesService(page, limit) {
     try {
-        return await getAllMovies();
+        const movies = await getAllMovies(page, limit);
+
+        movies.forEach(movie => {
+            if (movie._id !== undefined) {
+                movie.id = movie._id;
+                delete movie._id;
+            }
+        });
+
+        return movies;
     } catch (error) {
         throw new AppError(error.message || 'Error getting all movies', 500);
     }

@@ -67,7 +67,14 @@ export async function deleteMovieHandler(req, res, next) {
 
 export async function getAllMoviesHandler(req, res, next) {
     try {
-        const result = await getAllMoviesService();
+        const page = parseInt(req.query.page, 10) || 1;
+        const limit = parseInt(req.query.limit, 10) || 10;
+
+        if (page < 1 || limit < 1) {
+            return next(new ValidationError("Page and limit must be positive integers."));
+        }
+
+        const result = await getAllMoviesService(page, limit);
         res.status(200).json(result);
     } catch (error) {
         next(error);

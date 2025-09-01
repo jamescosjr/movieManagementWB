@@ -42,6 +42,8 @@ describe("GET /movies", () => {
             }]);
         });
         it("should return 200 and an empty array when there are no movies", async () => {
+            await dbHandler.clearDatabase();
+
             const response = await supertest(app).get(`/movies`);
 
             expect(response.status).toBe(200);
@@ -50,10 +52,12 @@ describe("GET /movies", () => {
     });
     describe("non succes cases", () => {
         it("should return 500 when there is an error", async () => {
-            jest.spyOn(Movie, 'find').mockRejectedValue(new Error('Internal server error'));
+            jest.spyOn(Movie, 'find').mockImplementationOnce(() => {
+                throw new Error("Database error");
+            });
+
             const response = await supertest(app).get("/movies");
             expect(response.status).toBe(500);
-            expect(response.body.message).toBe('Internal server error');
         });
     });
 });

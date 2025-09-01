@@ -1,8 +1,9 @@
 import { Movie } from "../schema/movieSchema.js";
 
-export async function getAllMovies(){
+export async function getAllMovies(page, limit){
     try {
-        return Movie.find();
+        const skip = (page - 1) * limit;
+        return Movie.find().skip(skip).limit(limit);
     } catch (error) {
         next(error);
     }
