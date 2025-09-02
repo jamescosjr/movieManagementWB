@@ -130,9 +130,24 @@ export async function findByDirectorService(director, page, limit) {
     }
 }
 
-export async function findByYearService(year) {
+export async function findByYearService(year, page, limit) {
     try {
-        return await findByYear(year);
+        const movies = await findByYear(year, page, limit);
+        if (!movies || movies.length === 0) {
+            return [];
+        }
+
+        const formattedMovies = movies.map(movie => {
+            const movieObject = movie.toObject();
+
+            if (movieObject && movieObject._id !== undefined) {
+                const { _id, ...rest } = movieObject;
+                return { ...rest, id: _id };
+            }
+            return movieObject;
+        });
+
+        return formattedMovies;
     } catch (error) {
         throw new AppError(error.message || 'Error getting movie by year', 500);
     }

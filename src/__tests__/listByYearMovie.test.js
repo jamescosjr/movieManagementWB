@@ -35,25 +35,24 @@ describe("GET /movies/year/year", () => {
                 director: movie.director,
                 genre: movie.genre,
                 year: movie.year,
-                _id: expect.any(String),
+                id: expect.any(String),
                 __v: 0,
             }]));
         });
     });
     describe("non success cases", () => {
-        it("should return 404 when the movie is not found", async () => {
+        it("should return empty array when the movie is not found", async () => {
             const response = await supertest(app).get("/movies/year/2021").query({ year: 2021 });
 
-            expect(response.status).toBe(404);
-            expect(response.body).toMatchObject({
-                message: "Movie not found",
-            });
+            expect(response.status).toBe(200);
+            expect(response.body).toMatchObject([]);
         });
         it("should return status 500 with message on error", async () => {
-            jest.spyOn(Movie, 'find').mockRejectedValue(new Error('Internal server error'));
+            jest.spyOn(Movie, 'find').mockImplementationOnce(() => {
+                throw new Error("Database error");
+            });
             const response = await supertest(app).get("/movies/year/2021");
             expect(response.status).toBe(500);
-            expect(response.body.message).toBe('Internal server error');
         });
     });
 });

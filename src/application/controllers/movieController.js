@@ -134,12 +134,15 @@ export async function listMoviesbyDirectorHandler(req, res, next) {
 
 export async function listMoviesbyYearHandler(req, res, next) {
     const { year } = req.params;
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 10;
+
+    if (page < 1 || limit < 1) {
+            return next(new ValidationError("Page and limit must be positive integers."));
+        }
 
     try {
-        const result = await findByYearService(year);
-        if (!result.length) {
-            return next(new NotFoundError('Movie not found'));
-        }
+        const result = await findByYearService(year, page, limit);
         res.status(200).json(result);
     } catch (error) {
         next(error);
