@@ -9,9 +9,11 @@ export async function getAllMovies(page, limit){
     }
 }
 
-export async function findByTitle(title){
+export async function findByTitle(title, page, limit){
     try{
-        return Movie.find({ title })
+        const skip = (page - 1) * limit;
+
+        return Movie.find({ title }).skip(skip).limit(limit);
     } catch (error) {
         next(error);
     }
