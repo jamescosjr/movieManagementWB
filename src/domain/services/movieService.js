@@ -92,9 +92,24 @@ export async function findByGenreService(genre) {
     }
 }
 
-export async function findByDirectorService(director) {
+export async function findByDirectorService(director, page, limit) {
     try {
-        return await findByDirector(director);
+        const movies = await findByDirector(director, page, limit);
+        if (!movies || movies.length === 0) {
+            return [];
+        }
+
+        const formattedMovies = movies.map(movie => {
+            const movieObject = movie.toObject();
+
+            if (movieObject && movieObject._id !== undefined) {
+                const { _id, ...rest } = movieObject;
+                return { ...rest, id: _id };
+            }
+            return movieObject;
+        });
+
+        return formattedMovies;
     } catch (error) {
         throw new AppError(error.message || 'Error getting movie by director', 500);
     }

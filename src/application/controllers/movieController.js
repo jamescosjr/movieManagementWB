@@ -103,9 +103,15 @@ export async function findMovieByTitleHandler(req, res, next) {
 
 export async function listMoviesbyGenreHandler(req, res, next) {
     const { genre } = req.params;
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 10;
+
+    if (page < 1 || limit < 1) {
+            return next(new ValidationError("Page and limit must be positive integers."));
+        }
 
     try {
-        const result = await findByGenreService(genre);
+        const result = await findByGenreService(genre, page, limit);
         if (!result.length) {
             return next(new NotFoundError('Movie not found'));
         }

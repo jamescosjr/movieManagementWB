@@ -51,11 +51,10 @@ describe("GET /movies/title", () => {
         });
         it("should return status 500 with message on error", async () => {
              jest.spyOn(Movie, 'find').mockImplementationOnce(() => {
-                            throw new Error("Database error");
-                        });
-            
-                        const response = await supertest(app).get("/movies/title").query({ title: "Test Movie" });
-                        expect(response.status).toBe(500);
+                throw new Error("Database error");
+            });
+            const response = await supertest(app).get("/movies/title").query({ title: "Test Movie" });
+            expect(response.status).toBe(500);
         });
     });
 });

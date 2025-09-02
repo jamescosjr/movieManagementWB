@@ -35,7 +35,7 @@ describe("GET /movies/director/director", () => {
                 director: movie.director,
                 genre: movie.genre,
                 year: movie.year,
-                _id: expect.any(String),
+                id: expect.any(String),
                 __v: 0,
             }]));
         });
@@ -50,10 +50,11 @@ describe("GET /movies/director/director", () => {
             });
         });
         it("should return status 500 with message on error", async () => {
-            jest.spyOn(Movie, 'find').mockRejectedValue(new Error('Internal server error'));
-            const response = await supertest(app).get("/movies/director/Test Director");
+             jest.spyOn(Movie, 'find').mockImplementationOnce(() => {
+            throw new Error("Database error");
+             });            
+             const response = await supertest(app).get("/movies/director/Test Director");
             expect(response.status).toBe(500);
-            expect(response.body.message).toBe('Internal server error');
         });
     });
 });

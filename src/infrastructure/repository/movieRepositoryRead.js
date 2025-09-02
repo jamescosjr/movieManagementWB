@@ -27,9 +27,10 @@ export async function findByGenre(genre){
     }
 }
 
-export async function findByDirector(director){
+export async function findByDirector(director, page, limit){
     try{
-        return Movie.find({ director })
+        const skip = (page - 1) * limit;
+        return Movie.find({ director }).skip(skip).limit(limit);
     } catch (error) {
         next(error);
     }
