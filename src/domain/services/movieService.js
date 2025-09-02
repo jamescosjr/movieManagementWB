@@ -84,9 +84,24 @@ export async function findByTitleService(title, page, limit) {
     }
 }
 
-export async function findByGenreService(genre) {
+export async function findByGenreService(genre, page, limit) {
     try {
-        return await findByGenre(genre);
+        const movies = await findByGenre(genre, page, limit);
+        if (!movies || movies.length === 0) {
+            return [];
+        }
+
+        const formattedMovies = movies.map(movie => {
+            const movieObject = movie.toObject();
+
+            if (movieObject && movieObject._id !== undefined) {
+                const { _id, ...rest } = movieObject;
+                return { ...rest, id: _id };
+            }
+            return movieObject;
+        });
+
+        return formattedMovies;
     } catch (error) {
         throw new AppError(error.message || 'Error getting movie by genre', 500);
     }

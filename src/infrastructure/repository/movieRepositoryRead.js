@@ -19,9 +19,10 @@ export async function findByTitle(title, page, limit){
     }
 }
 
-export async function findByGenre(genre){
+export async function findByGenre(genre, page, limit){
     try{
-        return Movie.find({ genre })
+        const skip = (page - 1) * limit;
+        return Movie.find({ genre }).skip(skip).limit(limit);   
     } catch (error) {
         next(error);
     }

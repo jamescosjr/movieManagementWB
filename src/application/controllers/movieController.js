@@ -92,9 +92,6 @@ export async function findMovieByTitleHandler(req, res, next) {
 
     try {
         const result = await findByTitleService(title, page, limit);
-        if (!result.length) {
-            return next(new NotFoundError('Movie not found'));
-        }
         res.status(200).json(result);
     } catch (error) {
         next(error);
@@ -112,9 +109,6 @@ export async function listMoviesbyGenreHandler(req, res, next) {
 
     try {
         const result = await findByGenreService(genre, page, limit);
-        if (!result.length) {
-            return next(new NotFoundError('Movie not found'));
-        }
         res.status(200).json(result);
     } catch (error) {
         next(error);
@@ -123,12 +117,15 @@ export async function listMoviesbyGenreHandler(req, res, next) {
 
 export async function listMoviesbyDirectorHandler(req, res, next) {
     const { director } = req.params;
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 10;
+
+    if (page < 1 || limit < 1) {
+            return next(new ValidationError("Page and limit must be positive integers."));
+        }
 
     try {
-        const result = await findByDirectorService(director);
-        if (!result.length) {
-            return next(new NotFoundError('Movie not found'));
-        }
+        const result = await findByDirectorService(director, page, limit);
         res.status(200).json(result);
     } catch (error) {
         next(error);

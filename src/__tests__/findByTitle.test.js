@@ -41,13 +41,11 @@ describe("GET /movies/title", () => {
         });
     });
     describe("non success cases", () => {
-        it("should return 404 when the movie is not found", async () => {
+        it("should return empty array when the movie is not found", async () => {
             const response = await supertest(app).get("/movies/title").query({ title: "Test Movie" });
 
-            expect(response.status).toBe(404);
-            expect(response.body).toMatchObject({
-                message: "Movie not found",
-            });
+            expect(response.status).toBe(200);
+            expect(response.body).toEqual([]);
         });
         it("should return status 500 with message on error", async () => {
              jest.spyOn(Movie, 'find').mockImplementationOnce(() => {
