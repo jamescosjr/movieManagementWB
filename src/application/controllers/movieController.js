@@ -9,6 +9,7 @@ import {
     findByGenreService,
     findByDirectorService,
     findByYearService,
+    searchMoviesService
  } from "../../domain/services/movieService.js";
   import { AppError, ValidationError, NotFoundError } from "../../domain/error/customErros.js";
   import { validMovieData } from "../../domain/utils/validation.js";
@@ -143,6 +144,23 @@ export async function listMoviesbyYearHandler(req, res, next) {
 
     try {
         const result = await findByYearService(year, page, limit);
+        res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+}
+
+export async function searchMoviesHandler(req, res, next) {
+    const { title, director, genre, year } = req.query;
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 10;
+
+    if (page < 1 || limit < 1) {
+        return next(new ValidationError("Page and limit must be positive integers."));
+    }
+
+    try {
+        const result = await searchMoviesService({ title, director, genre, year, page, limit });
         res.status(200).json(result);
     } catch (error) {
         next(error);

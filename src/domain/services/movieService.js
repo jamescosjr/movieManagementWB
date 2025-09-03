@@ -8,7 +8,8 @@ import {
     findByTitle,
     findByGenre,
     findByDirector,
-    findByYear
+    findByYear,
+    findAndCountMoviesByQuery
  } from "../../infrastructure/repository/movieRepositoryRead.js";
 import { AppError } from '../error/customErros.js'
 
@@ -150,5 +151,36 @@ export async function findByYearService(year, page, limit) {
         return formattedMovies;
     } catch (error) {
         throw new AppError(error.message || 'Error getting movie by year', 500);
+    }
+}
+
+export async function searchMoviesService({ title, director, genre, year, page, limit }) {
+    try {
+        let movies;
+
+        switch (true) {
+            case Boolean(title):
+                movies = await findByTitleService(title, page, limit);
+                break;
+            case Boolean(director):
+                movies = await findByDirectorService(director, page, limit);
+                break;
+            case Boolean(genre):
+                movies = await findByGenreService(genre, page, limit);
+                break;
+            case Boolean(year):
+                movies = await findByYearService(year, page, limit);
+                break;
+            default:
+                movies = await getAllMoviesService(page, limit);
+        }
+
+        if (!movies || movies.length === 0) {
+            return [];
+        }
+
+        return movies;
+    } catch (error) {
+        throw new AppError(error.message || 'Error searching movies', 500);
     }
 }
