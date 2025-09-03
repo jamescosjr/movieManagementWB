@@ -9,7 +9,6 @@ import {
     findByGenre,
     findByDirector,
     findByYear,
-    findAndCountMoviesByQuery
  } from "../../infrastructure/repository/movieRepositoryRead.js";
 import { AppError } from '../error/customErros.js'
 
