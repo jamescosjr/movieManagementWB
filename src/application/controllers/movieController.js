@@ -15,7 +15,8 @@ import {
   import { validMovieData } from "../../domain/utils/validation.js";
   
   export async function registerMovieHandler(req, res, next) {
-    const { title, director, genre, year } = req.body;
+    const { title, director, genre } = req.body;
+    const year = parseInt(req.body.year, 10) || undefined;
 
     const validation = validMovieData(title, director, genre, year);
     if (!validation.valid) {
@@ -151,9 +152,10 @@ export async function listMoviesbyYearHandler(req, res, next) {
 }
 
 export async function searchMoviesHandler(req, res, next) {
-    const { title, director, genre, year } = req.query;
+    const { title, director, genre } = req.query;
     const page = parseInt(req.query.page, 10) || 1;
     const limit = parseInt(req.query.limit, 10) || 10;
+    const year = parseInt(req.query.year, 10) || undefined;
 
     if (page < 1 || limit < 1) {
         return next(new ValidationError("Page and limit must be positive integers."));
