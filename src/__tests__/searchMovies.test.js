@@ -143,7 +143,7 @@ describe("GET /movies/search", () => {
 
         const response = await supertest(app)
             .get("/search")
-            .query({ genre: "Action" });
+            .query({ searchType: "genre", searchTerm: "Action" });
 
         expect(response.status).toBe(200);
         expect(response.body).toEqual(
@@ -176,7 +176,7 @@ describe("GET /movies/search", () => {
 
         const response = await supertest(app)
             .get("/search")
-            .query({ year: 2008 });
+            .query({ searchType: "year", searchTerm: 2008 });
 
         expect(response.status).toBe(200);
         expect(response.body).toEqual(
