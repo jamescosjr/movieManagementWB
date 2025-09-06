@@ -32,7 +32,7 @@ describe("GET /movies", () => {
             const response = await supertest(app).get(`/movies`);
 
             expect(response.status).toBe(200);
-            expect(response.body).toMatchObject([{
+            expect(response.body.data).toMatchObject([{
                 title: "The Shawshank Redemption",
                 director: "Frank Darabont",
                 genre: "Drama",
@@ -47,7 +47,7 @@ describe("GET /movies", () => {
             const response = await supertest(app).get(`/movies`);
 
             expect(response.status).toBe(200);
-            expect(response.body).toMatchObject([]);
+            expect(response.body.data).toMatchObject([]);
         });
     });
     describe("non succes cases", () => {

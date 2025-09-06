@@ -3,7 +3,14 @@ import { Movie } from "../schema/movieSchema.js";
 export async function getAllMovies(page, limit){
     try {
         const skip = (page - 1) * limit;
-        return Movie.find().skip(skip).limit(limit).sort({ title: 1 });
+
+        const [movies, totalCount] = await Promise.all([
+            Movie.find().skip(skip).limit(limit).sort({ title: 1 }).lean(),
+            Movie.countDocuments()
+        ]);
+
+        return { movies, totalCount };
+
     } catch (error) {
         throw error; 
     }
@@ -45,16 +52,22 @@ export async function findByDirector(director, page, limit){
 
         return { movies, totalCount };
     } catch (error) {
-        next(error);
+        throw error;
     }
 }
 
 export async function findByYear(year, page, limit){
     try{
-        const query = { year };
+        const query = { year }; 
         const skip = (page - 1) * limit;
-        return Movie.find(query).skip(skip).limit(limit).sort({ title: 1 });
+
+        const [movies, totalCount] = await Promise.all([
+            Movie.find(query).skip(skip).limit(limit).sort({ title: 1 }).lean(),
+            Movie.countDocuments(query)
+        ]);
+
+        return { movies, totalCount };
     } catch (error) {
-        next(error);
+        throw error;
     }
 }

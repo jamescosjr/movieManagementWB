@@ -39,7 +39,7 @@ describe("GET /movies/search", () => {
             .query({ page: 1, limit: 10 });
 
         expect(response.status).toBe(200);
-        expect(response.body).toEqual(
+        expect(response.body.data).toEqual(
             expect.arrayContaining([
                 expect.objectContaining({
                     title: "Inception",
@@ -73,7 +73,7 @@ describe("GET /movies/search", () => {
             .query({ title: "Inception" });
 
         expect(response.status).toBe(200);
-        expect(response.body).toEqual(
+        expect(response.body.data).toEqual(
             expect.arrayContaining([
                 expect.objectContaining({
                     title: "Inception",
@@ -107,7 +107,7 @@ describe("GET /movies/search", () => {
             .query({ director: "Christopher Nolan" });
 
         expect(response.status).toBe(200);
-        expect(response.body).toEqual(
+        expect(response.body.data).toEqual(
             expect.arrayContaining([
                 expect.objectContaining({
                     title: "Inception",
@@ -179,7 +179,7 @@ describe("GET /movies/search", () => {
             .query({ searchType: "year", searchTerm: 2008 });
 
         expect(response.status).toBe(200);
-        expect(response.body).toEqual(
+        expect(response.body.data).toEqual(
             expect.arrayContaining([
                 expect.objectContaining({
                     title: "The Dark Knight",

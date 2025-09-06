@@ -38,23 +38,28 @@ export async function deleteMovieService(id) {
 
 export async function getAllMoviesService(page, limit) {
     try {
-        const movies = await getAllMovies(page, limit);
+        const { movies, totalCount } = await getAllMovies(page, limit);
 
         if (!movies || movies.length === 0) {
-            return [];
+            return {
+                data: [],
+                currentPage: page,
+                totalCount: 0,
+                totalPages: 0
+            };
         }
 
         const formattedMovies = movies.map(movie => {
-            const movieObject = movie.toObject(); 
-            
-            if (movieObject && movieObject._id !== undefined) {
-                const { _id, ...rest } = movieObject;
-                return { ...rest, id: _id };
-            }
-            return movieObject;
+            const { _id, ...rest } = movie;
+            return { ...rest, id: _id };
         });
 
-        return formattedMovies;
+        return {
+            data: formattedMovies,
+            currentPage: page,
+            totalCount: totalCount,
+            totalPages: limit && limit > 0 ? Math.ceil(totalCount / limit) : 0
+        };
     } catch (error) {
         throw new AppError(error.message || 'Error getting all movies', 500);
     }
@@ -149,22 +154,33 @@ export async function findByDirectorService(director, page, limit) {
 
 export async function findByYearService(year, page, limit) {
     try {
-        const movies = await findByYear(year, page, limit);
+        const parsedYear = parseInt(year, 10);
+        if (isNaN(parsedYear)) {
+            return { data: [], currentPage: page, totalCount: 0, totalPages: 0 };
+        }
+
+        const { movies, totalCount } = await findByYear(parsedYear, page, limit);
+
         if (!movies || movies.length === 0) {
-            return [];
+            return {
+                data: [],
+                currentPage: page,
+                totalCount: 0,
+                totalPages: 0
+            };
         }
 
         const formattedMovies = movies.map(movie => {
-            const movieObject = movie.toObject();
-
-            if (movieObject && movieObject._id !== undefined) {
-                const { _id, ...rest } = movieObject;
-                return { ...rest, id: _id };
-            }
-            return movieObject;
+            const { _id, ...rest } = movie;
+            return { ...rest, id: _id };
         });
 
-        return formattedMovies;
+        return {
+            data: formattedMovies,
+            currentPage: page,
+            totalCount: totalCount,
+            totalPages: Math.ceil(totalCount / limit)
+        };
     } catch (error) {
         throw new AppError(error.message || 'Error getting movie by year', 500);
     }
@@ -188,7 +204,7 @@ export async function searchMoviesService({ searchType, searchTerm, page, limit 
                 movies = await findByGenreService(genre, page, limit);
                 break;
             case Boolean(searchType == "year"):
-                const year = searchTerm;
+                const year = parseInt(searchTerm, 10)   ;
                 movies = await findByYearService(year, page, limit);
                 break;
             default:
