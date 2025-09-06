@@ -146,7 +146,7 @@ describe("GET /movies/search", () => {
             .query({ searchType: "genre", searchTerm: "Action" });
 
         expect(response.status).toBe(200);
-        expect(response.body).toEqual(
+        expect(response.body.data).toEqual(
             expect.arrayContaining([
                 expect.objectContaining({
                     title: "The Dark Knight",

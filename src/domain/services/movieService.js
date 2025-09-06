@@ -62,23 +62,28 @@ export async function getAllMoviesService(page, limit) {
 
 export async function findByTitleService(title, page, limit) {
     try {
-        const movies = await findByTitle(title, page, limit);
+        const { movies, totalCount } = await findByTitle(title, page, limit);
 
         if (!movies || movies.length === 0) {
-            return [];
+            return {
+                data: [],
+                currentPage: page,
+                totalCount: 0,
+                totalPages: 0
+            };
         }
 
         const formattedMovies = movies.map(movie => {
-            const movieObject = movie.toObject(); 
-            
-            if (movieObject && movieObject._id !== undefined) {
-                const { _id, ...rest } = movieObject;
-                return { ...rest, id: _id };
-            }
-            return movieObject;
+            const { _id, ...rest } = movie;
+            return { ...rest, id: _id };
         });
 
-        return formattedMovies;
+        return {
+            data: formattedMovies,
+            currentPage: page,
+            totalCount: totalCount,
+            totalPages: Math.ceil(totalCount / limit)
+        };
     } catch (error) {
         throw new AppError(error.message || 'Error getting movie by title', 500);
     }
@@ -86,22 +91,28 @@ export async function findByTitleService(title, page, limit) {
 
 export async function findByGenreService(genre, page, limit) {
     try {
-        const movies = await findByGenre(genre, page, limit);
+        const { movies, totalCount } = await findByGenre(genre, page, limit);
+
         if (!movies || movies.length === 0) {
-            return [];
+            return {
+                data: [],
+                currentPage: page,
+                totalCount: 0,
+                totalPages: 0
+            };
         }
 
         const formattedMovies = movies.map(movie => {
-            const movieObject = movie.toObject();
-
-            if (movieObject && movieObject._id !== undefined) {
-                const { _id, ...rest } = movieObject;
-                return { ...rest, id: _id };
-            }
-            return movieObject;
+            const { _id, ...rest } = movie;
+            return { ...rest, id: _id };
         });
 
-        return formattedMovies;
+        return {
+            data: formattedMovies,
+            currentPage: page,
+            totalCount: totalCount,
+            totalPages: Math.ceil(totalCount / limit)
+        };
     } catch (error) {
         throw new AppError(error.message || 'Error getting movie by genre', 500);
     }
@@ -109,22 +120,28 @@ export async function findByGenreService(genre, page, limit) {
 
 export async function findByDirectorService(director, page, limit) {
     try {
-        const movies = await findByDirector(director, page, limit);
+        const { movies, totalCount } = await findByDirector(director, page, limit);
+
         if (!movies || movies.length === 0) {
-            return [];
+            return {
+                data: [],
+                currentPage: page,
+                totalCount: 0,
+                totalPages: 0
+            };
         }
 
         const formattedMovies = movies.map(movie => {
-            const movieObject = movie.toObject();
-
-            if (movieObject && movieObject._id !== undefined) {
-                const { _id, ...rest } = movieObject;
-                return { ...rest, id: _id };
-            }
-            return movieObject;
+            const { _id, ...rest } = movie;
+            return { ...rest, id: _id };
         });
 
-        return formattedMovies;
+        return {
+            data: formattedMovies,
+            currentPage: page,
+            totalCount: totalCount,
+            totalPages: Math.ceil(totalCount / limit)
+        };
     } catch (error) {
         throw new AppError(error.message || 'Error getting movie by director', 500);
     }
