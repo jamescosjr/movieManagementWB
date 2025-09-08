@@ -6,6 +6,8 @@ import errorHandler from "./src/application/middleware/errorHandler.js";
 import { validate } from 'express-jsonschema';
 import yaml from 'js-yaml';
 import fs from 'fs';
+import cors from 'cors';
+
 
 const schema = yaml.load(fs.readFileSync('./src/contracts/contract.yaml', 'utf8'));
 
@@ -13,6 +15,8 @@ dotenv.config();
 
 export const app = express();
 const PORT = process.env.PORT;
+
+app.use(cors());
 
 app.use(express.json());
 
