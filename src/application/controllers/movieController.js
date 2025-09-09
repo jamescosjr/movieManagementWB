@@ -154,7 +154,7 @@ export async function listMoviesbyYearHandler(req, res, next) {
 
 export async function searchMoviesHandler(req, res, next) {
     const { searchType, searchTerm } = req.query;
-    const page = parseInt(req.query.page, 10) || 1;
+    const page = parseInt(req.query.page, 10);
     const limit = parseInt(req.query.limit, 10) || 10;
 
     if (page < 1 || limit < 1) {
