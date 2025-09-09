@@ -40,17 +40,6 @@ export async function getAllMoviesService(page, limit) {
     try {
         const { movies, totalCount } = await getAllMovies(page, limit);
 
-        const totalPages = Math.ceil(totalCount / limit);
-
-        if (page === 0) {
-            return {
-                data: [],
-                currentPage: page,
-                totalCount: totalCount,
-                totalPages: totalPages
-            };
-        }
-
         if (!movies || movies.length === 0) {
             return {
                 data: [],
@@ -69,7 +58,7 @@ export async function getAllMoviesService(page, limit) {
             data: formattedMovies,
             currentPage: page,
             totalCount: totalCount,
-            totalPages: totalPages
+            totalPages: Math.ceil(totalCount / limit)
         };
     } catch (error) {
         throw new AppError(error.message || 'Error getting all movies', 500);
@@ -79,16 +68,6 @@ export async function getAllMoviesService(page, limit) {
 export async function findByTitleService(title, page, limit) {
     try {
         const { movies, totalCount } = await findByTitle(title, page, limit);
-        const totalPages = Math.ceil(totalCount / limit);
-
-        if (page === 0) {
-            return {
-                data: [],
-                currentPage: page,
-                totalCount: totalCount,
-                totalPages: totalPages
-            };
-        }
 
         if (!movies || movies.length === 0) {
             return {
@@ -118,16 +97,6 @@ export async function findByTitleService(title, page, limit) {
 export async function findByGenreService(genre, page, limit) {
     try {
         const { movies, totalCount } = await findByGenre(genre, page, limit);
-        const totalPages = Math.ceil(totalCount / limit);
-
-        if (page === 0) {
-            return {
-                data: [],
-                currentPage: page,
-                totalCount: totalCount,
-                totalPages: totalPages
-            };
-        }
 
         if (!movies || movies.length === 0) {
             return {
@@ -157,16 +126,6 @@ export async function findByGenreService(genre, page, limit) {
 export async function findByDirectorService(director, page, limit) {
     try {
         const { movies, totalCount } = await findByDirector(director, page, limit);
-        const totalPages = Math.ceil(totalCount / limit);
-
-        if (page === 0) {
-            return {
-                data: [],
-                currentPage: page,
-                totalCount: totalCount,
-                totalPages: totalPages
-            };
-        }
 
         if (!movies || movies.length === 0) {
             return {
@@ -201,16 +160,6 @@ export async function findByYearService(year, page, limit) {
         }
 
         const { movies, totalCount } = await findByYear(parsedYear, page, limit);
-        const totalPages = Math.ceil(totalCount / limit);
-
-        if (page === 0) {
-            return {
-                data: [],
-                currentPage: page,
-                totalCount: totalCount,
-                totalPages: totalPages
-            };
-        }
 
         if (!movies || movies.length === 0) {
             return {
