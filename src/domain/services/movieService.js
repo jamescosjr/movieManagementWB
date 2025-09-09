@@ -241,6 +241,8 @@ export async function searchMoviesService({ searchType, searchTerm, page, limit 
     try {
         let movies;
 
+        page = page + 1;
+
         switch (true) {
             case Boolean(searchType == "title"):
                 const title = searchTerm;

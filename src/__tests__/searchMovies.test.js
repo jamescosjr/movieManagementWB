@@ -36,7 +36,7 @@ describe("GET /movies/search", () => {
 
         const response = await supertest(app)
             .get("/search")
-            .query({ page: 1, limit: 10 });
+            .query({ page: 0, limit: 10 });
 
         expect(response.status).toBe(200);
         expect(response.body.data).toEqual(
