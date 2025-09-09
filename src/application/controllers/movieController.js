@@ -158,7 +158,7 @@ export async function searchMoviesHandler(req, res, next) {
     const limit = parseInt(req.query.limit, 10) || 10;
 
     if (page < 1 || limit < 1) {
-        return next(new ValidationError("Page and limit must be positive integers."));
+        return new ValidationError("Page and limit must be positive integers.");
     }
 
     try {
