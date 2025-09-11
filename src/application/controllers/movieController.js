@@ -164,3 +164,7 @@ export async function searchMoviesHandler(req, res, next) {
         next(error);
     }
 }
+
+export async function wakeupHandler(req, res, next) {
+    res.status(200).json({ message: "I'm awake!" });
+}

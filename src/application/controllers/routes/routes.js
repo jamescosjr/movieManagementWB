@@ -9,6 +9,7 @@ import {
   listMoviesbyDirectorHandler,
   listMoviesbyYearHandler,
   searchMoviesHandler,
+  wakeupHandler,
 } from "../movieController.js";
 
 const router = Router();
@@ -22,5 +23,6 @@ router.get("/movies/year/:year", listMoviesbyYearHandler);
 router.delete("/movies/:id", deleteMovieHandler);
 router.put("/movies/:id", updateMovieHandler);
 router.get("/search", searchMoviesHandler);
+router.get("/wakeup", wakeupHandler);
 
 export default router;
