@@ -165,6 +165,28 @@ This is a Node.js-based API for managing a collection of movies. It provides fun
 
 ---
 
+## 📚 Documentação Completa
+
+Este projeto possui documentação abrangente para desenvolvedores e AI agents:
+
+### Documentos Principais
+- **[INDEX.md](INDEX.md)** - Índice de toda documentação
+- **[AGENT.md](AGENT.md)** - Guia completo para AI agents ⭐
+- **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)** - Referência rápida
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - Arquitetura do sistema
+
+### Guias de Desenvolvimento
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** - Como contribuir
+- **[CODE_STYLE.md](CODE_STYLE.md)** - Padrões de código
+- **[CHECKLIST.md](CHECKLIST.md)** - Checklists de desenvolvimento
+- **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** - Solução de problemas
+
+### Para Começar
+- **Desenvolvedores**: Leia [CONTRIBUTING.md](CONTRIBUTING.md)
+- **AI Agents**: Leia [AGENT.md](AGENT.md) e use [QUICK_REFERENCE.md](QUICK_REFERENCE.md)
+
+---
+
 ## License
 
 This project is open source and available under the [MIT License](LICENSE).
