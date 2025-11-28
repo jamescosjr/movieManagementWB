@@ -116,6 +116,7 @@ jobs:
           mkdir -p deploy
           cp docker-compose.prod.yml deploy/docker-compose.yml
           cp .env.example deploy/.env.example
+          cp -r nginx deploy/nginx
 
       - name: Copy files to VPS
         uses: appleboy/scp-action@v0.1.7

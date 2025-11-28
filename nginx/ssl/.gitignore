@@ -1,0 +1,6 @@
+# Ignore certificados SSL (dados sensíveis)
+*.pem
+*.key
+*.crt
+*.csr
+!README.md
