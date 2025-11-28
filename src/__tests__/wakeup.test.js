@@ -1,8 +1,6 @@
 import supertest from "supertest";
-import { Movie } from "../infrastructure/schema/movieSchema.js";
-import { app } from "../../server.js";
-import { AppError, ValidationError } from "../domain/error/customErros.js";
-const dbHandler = require('../../jest/jest.setup.js');
+import { app } from "../../server";
+const dbHandler = require('../../jest/jest.setup');
 
 beforeAll(async () => {
     await dbHandler.connect();

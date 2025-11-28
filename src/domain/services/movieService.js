@@ -193,22 +193,26 @@ export async function searchMoviesService({ searchType, searchTerm, page, limit 
         page = page + 1;
 
         switch (true) {
-            case Boolean(searchType == "title"):
+            case Boolean(searchType == "title"): {
                 const title = searchTerm;
                 movies = await findByTitleService(title, page, limit);
                 break;
-            case Boolean(searchType == "director"):
+            }
+            case Boolean(searchType == "director"): {
                 const director = searchTerm;
                 movies = await findByDirectorService(director, page, limit);
                 break;
-            case Boolean(searchType == "genre"):
+            }
+            case Boolean(searchType == "genre"): {
                 const genre = searchTerm;
                 movies = await findByGenreService(genre, page, limit);
                 break;
-            case Boolean(searchType == "year"):
-                const year = parseInt(searchTerm, 10)   ;
+            }
+            case Boolean(searchType == "year"): {
+                const year = parseInt(searchTerm, 10);
                 movies = await findByYearService(year, page, limit);
                 break;
+            }
             default:
                 movies = await getAllMoviesService(page, limit);
         }

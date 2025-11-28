@@ -1,7 +1,7 @@
 import supertest from "supertest";
 import { Movie } from "../infrastructure/schema/movieSchema.js";
 import { app } from "../../server";
-import { AppError, ValidationError } from "../domain/error/customErros";
+import { AppError } from "../domain/error/customErros";
 const dbHandler = require('../../jest/jest.setup');
 
 beforeAll(async () => {

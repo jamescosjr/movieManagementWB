@@ -11,7 +11,7 @@ import {
     findByYearService,
     searchMoviesService
  } from "../../domain/services/movieService.js";
-  import { AppError, ValidationError, NotFoundError } from "../../domain/error/customErros.js";
+  import { ValidationError, NotFoundError } from "../../domain/error/customErros.js";
   import { validMovieData } from "../../domain/utils/validation.js";
   
   export async function registerMovieHandler(req, res, next) {
@@ -165,6 +165,6 @@ export async function searchMoviesHandler(req, res, next) {
     }
 }
 
-export async function wakeupHandler(req, res, next) {
+export async function wakeupHandler(req, res) {
     res.status(200).json({ message: "I'm awake!" });
 }
