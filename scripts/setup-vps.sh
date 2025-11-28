@@ -44,7 +44,8 @@ fi
 echo -e "${GREEN}🔥 Configurando Firewall...${NC}"
 sudo ufw --force enable
 sudo ufw allow 22/tcp  # SSH
-sudo ufw allow 3000/tcp  # API
+sudo ufw allow 80/tcp  # HTTP
+sudo ufw allow 443/tcp  # HTTPS
 sudo ufw status
 
 echo -e "${GREEN}📁 Criando diretório da aplicação...${NC}"
@@ -54,7 +55,7 @@ cd /home/$USER/movie-management-api
 echo -e "${GREEN}📝 Criando arquivo .env de exemplo...${NC}"
 cat > .env.example << 'EOF'
 # Configurações da Aplicação
-PORT=3000
+PORT=5000
 NODE_ENV=production
 
 # MongoDB
