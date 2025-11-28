@@ -1,8 +1,6 @@
-version: '3.8'
-
 services:
   app:
-    image: ${DOCKER_IMAGE:-movie-management-api}:latest
+    image: ${DOCKER_IMAGE:-jameslincon/movie-management-api}:latest
     container_name: movie-api
     restart: unless-stopped
     ports:
