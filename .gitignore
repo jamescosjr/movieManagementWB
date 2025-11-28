@@ -1,3 +1,10 @@
 /node_modules
 /coverage
 .env
+.env.local
+.env.*.local
+*.pem
+*.key
+backups/
+logs/
+*.log

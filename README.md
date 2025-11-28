@@ -15,16 +15,18 @@ This is a Node.js-based API for managing a collection of movies. It provides fun
 
 ## Installation
 
+### Local Development
+
 1. Clone the repository:
 
-   ```
+   ```bash
    git clone <repository-url>
    cd movie-management-api
    ```
 
 2. Install dependencies:
 
-   ```
+   ```bash
    npm install
    ```
 
@@ -35,14 +37,28 @@ This is a Node.js-based API for managing a collection of movies. It provides fun
 
    ```env
    PORT=3000
-   MONGO_URI=mongodb://localhost:27017/moviesDB
+   MONGODB_URI=mongodb://localhost:27017/moviesDB
+   NODE_ENV=development
    ```
 
 4. Start the server:
 
+   ```bash
+   npm run dev    # Development with nodemon
+   npm start      # Production
    ```
-   npm start
-   ```
+
+### Docker
+
+```bash
+# Development
+docker-compose -f docker-compose.dev.yml up
+
+# Production
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+For complete deployment instructions, see [DEPLOY.md](DEPLOY.md).
 
 ---
 
@@ -174,6 +190,7 @@ Este projeto possui documentação abrangente para desenvolvedores e AI agents:
 - **[AGENT.md](AGENT.md)** - Guia completo para AI agents ⭐
 - **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)** - Referência rápida
 - **[ARCHITECTURE.md](ARCHITECTURE.md)** - Arquitetura do sistema
+- **[DEPLOY.md](DEPLOY.md)** - CI/CD e Deploy 🚀
 
 ### Guias de Desenvolvimento
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** - Como contribuir
@@ -181,9 +198,14 @@ Este projeto possui documentação abrangente para desenvolvedores e AI agents:
 - **[CHECKLIST.md](CHECKLIST.md)** - Checklists de desenvolvimento
 - **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** - Solução de problemas
 
+### Deploy e DevOps
+- **[.github/SECRETS.md](.github/SECRETS.md)** - Configuração de secrets
+- **[scripts/](scripts/)** - Scripts de deploy e manutenção
+
 ### Para Começar
 - **Desenvolvedores**: Leia [CONTRIBUTING.md](CONTRIBUTING.md)
 - **AI Agents**: Leia [AGENT.md](AGENT.md) e use [QUICK_REFERENCE.md](QUICK_REFERENCE.md)
+- **Deploy**: Leia [DEPLOY.md](DEPLOY.md) e [.github/SECRETS.md](.github/SECRETS.md)
 
 ---
 
