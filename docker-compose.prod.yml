@@ -1,6 +1,6 @@
 services:
   app:
-    image: ${DOCKER_IMAGE:-jameslincon/movie-management-api}:latest
+    image: ${DOCKER_IMAGE:-jamescosjr/movie-management-api}:latest
     container_name: movie-api
     restart: unless-stopped
     ports:
