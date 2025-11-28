@@ -24,11 +24,21 @@ A partir da **versão 1.1.0** do CI/CD, você pode escolher entre **duas opçõe
 
 ### Como Configurar
 
-1. **Gerar chave SSH SEM passphrase**:
+Você pode usar chave COM passphrase (mais seguro) ou SEM passphrase (mais simples). A pipeline suporta ambos via secrets `VPS_SSH_KEY` e `VPS_SSH_PASSPHRASE`.
+
+1A. **Gerar chave SSH COM passphrase (recomendado)**:
+   ```bash
+   ssh-keygen -t ed25519 -C "github-actions" -f ~/.ssh/github_actions
+   # será solicitado a passphrase (digite e memorize)
+   ```
+   - Use uma passphrase forte e única.
+   - Armazene como secret `VPS_SSH_PASSPHRASE` no GitHub.
+
+1B. **OU gerar chave SSH SEM passphrase**:
    ```bash
    ssh-keygen -t ed25519 -C "github-actions" -f ~/.ssh/github_actions -N ""
    ```
-   **Importante**: O parâmetro `-N ""` cria a chave SEM passphrase!
+   **Nota**: Menos seguro; conveniente para ambientes de teste.
 
 2. **Copiar chave pública para VPS**:
    ```bash
@@ -49,7 +59,13 @@ A partir da **versão 1.1.0** do CI/CD, você pode escolher entre **duas opçõe
      -----END OPENSSH PRIVATE KEY-----
      ```
 
-5. **NÃO configurar** o secret `VPS_PASSWORD`
+5. **Configurar secret de passphrase (se houver)**:
+   ```bash
+   gh secret set VPS_SSH_PASSPHRASE
+   # cole a passphrase exata
+   ```
+
+6. **NÃO configurar** o secret `VPS_PASSWORD`
 
 ### Testar
 ```bash
@@ -101,13 +117,11 @@ ssh usuario@vps-host -p 22
 
 ---
 
-## Como a Pipeline Detecta Qual Método Usar
+### Como a Pipeline Usa SSH
 
-A pipeline foi atualizada para usar:
-- **SSH Key** se o secret `VPS_SSH_KEY` existir
-- **Senha** se o secret `VPS_PASSWORD` existir
+Atualmente o workflow foi simplificado para sempre usar chave SSH (`VPS_SSH_KEY`). Se a chave tiver passphrase, defina também `VPS_SSH_PASSPHRASE`. A opção por senha (`VPS_PASSWORD`) foi mantida apenas como alternativa documentada, mas não está ativa no YAML atual.
 
-**Importante**: Configure apenas UM dos dois secrets, não ambos!
+**Importante**: Se quiser voltar a usar senha, será necessário reintroduzir lógica condicional no workflow.
 
 ---
 
@@ -119,7 +133,8 @@ A pipeline foi atualizada para usar:
 - `VPS_PORT` - Porta SSH (padrão: 22)
 
 ### Específico para SSH Key
-- `VPS_SSH_KEY` - Chave privada (sem passphrase)
+- `VPS_SSH_KEY` - Chave privada (com ou sem passphrase)
+- `VPS_SSH_PASSPHRASE` - Passphrase da chave (se existente)
 
 ### Específico para Senha
 - `VPS_PASSWORD` - Senha SSH
@@ -163,10 +178,10 @@ cat ~/.ssh/github_actions_new
 ## Troubleshooting
 
 ### "ssh: this private key is passphrase protected"
-- ❌ Sua chave SSH tem passphrase
-- ✅ Solução 1: Gere nova chave sem passphrase (`-N ""`)
-- ✅ Solução 2: Remova passphrase da chave existente
-- ✅ Solução 3: Use autenticação por senha (`VPS_PASSWORD`)
+- ✅ A chave possui passphrase e você NÃO forneceu `VPS_SSH_PASSPHRASE`
+- ✅ Solução 1: Adicione secret `VPS_SSH_PASSPHRASE`
+- ✅ Solução 2: Remova passphrase (menos seguro) ou gere outra sem passphrase
+- ✅ Solução 3: (Alternativa) Migrar para senha SSH (não recomendada para produção)
 
 ### "ssh: unable to authenticate"
 - ❌ Autenticação falhou
@@ -210,11 +225,11 @@ cat ~/.ssh/github_actions_new
 ## Checklist de Configuração
 
 ### Usando SSH Key
-- [ ] Gerar chave SSH sem passphrase (`-N ""`)
+- [ ] Gerar chave COM passphrase (ou sem, se preferir)
 - [ ] Copiar chave pública para VPS
 - [ ] Testar SSH manualmente
 - [ ] Adicionar `VPS_SSH_KEY` no GitHub
-- [ ] Verificar que `VPS_PASSWORD` NÃO está configurado
+- [ ] Adicionar `VPS_SSH_PASSPHRASE` (se gerou com passphrase)
 - [ ] Rodar pipeline
 
 ### Usando Senha
@@ -229,7 +244,22 @@ cat ~/.ssh/github_actions_new
 
 ## Exemplos de Configuração
 
-### GitHub Secrets com SSH Key
+### GitHub Secrets com SSH Key (com passphrase)
+```
+DOCKER_USERNAME=seu-usuario
+DOCKER_PASSWORD=dckr_pat_xxxxx
+VPS_HOST=192.168.1.100
+VPS_USERNAME=deploy-user
+VPS_SSH_KEY=-----BEGIN OPENSSH PRIVATE KEY-----
+xxxxxxxxxxxxx
+-----END OPENSSH PRIVATE KEY-----
+VPS_SSH_PASSPHRASE=Minh@PassFraseSegura2025!
+VPS_PORT=22
+APP_PORT=3000
+MONGODB_URI=mongodb://mongodb:27017/moviesDB
+```
+
+### GitHub Secrets com SSH Key (sem passphrase)
 ```
 DOCKER_USERNAME=seu-usuario
 DOCKER_PASSWORD=dckr_pat_xxxxx
@@ -257,6 +287,6 @@ MONGODB_URI=mongodb://mongodb:27017/moviesDB
 
 ---
 
-**Versão**: 1.0.0  
+**Versão**: 1.1.0  
 **Criado**: Dezembro 2024  
 **Relacionado**: [SECRETS.md](./SECRETS.md)

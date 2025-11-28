@@ -55,6 +55,14 @@ Este documento lista todos os secrets necessários para a pipeline CI/CD funcion
   -----END OPENSSH PRIVATE KEY-----
   ```
 
+#### `VPS_SSH_PASSPHRASE`
+- **Descrição**: Passphrase usada na geração da sua chave privada SSH (se você definiu uma ao criar a chave)
+- **Quando preencher**: Somente se sua chave exigir passphrase; se a chave foi gerada com `-N ""` deixe o secret em branco ou não crie.
+- **Nome do secret**: `VPS_SSH_PASSPHRASE`
+- **Armazenamento**: Exatamente a passphrase (texto puro). Não coloque aspas.
+- **Exemplo**: `Minh@PassFraseSegura2025!`
+
+
 #### `VPS_PORT`
 - **Descrição**: Porta SSH da VPS
 - **Padrão**: `22`
@@ -102,12 +110,13 @@ Este documento lista todos os secrets necessários para a pipeline CI/CD funcion
 # Autenticar
 gh auth login
 
-# Adicionar secrets
+# Adicionar secrets (com chave COM passphrase)
 gh secret set DOCKER_USERNAME
 gh secret set DOCKER_PASSWORD
 gh secret set VPS_HOST
 gh secret set VPS_USERNAME
 gh secret set VPS_SSH_KEY < ~/.ssh/github_actions
+gh secret set VPS_SSH_PASSPHRASE
 gh secret set VPS_PORT
 gh secret set APP_PORT
 gh secret set MONGODB_URI
@@ -127,7 +136,8 @@ gh secret set MONGODB_URI
 - [ ] VPS
   - [ ] `VPS_HOST` configurado
   - [ ] `VPS_USERNAME` configurado
-  - [ ] `VPS_SSH_KEY` configurado
+   - [ ] `VPS_SSH_KEY` configurado (inclui BEGIN/END)
+   - [ ] `VPS_SSH_PASSPHRASE` configurado (se a chave tiver passphrase)
   - [ ] `VPS_PORT` configurado
   - [ ] Testado SSH: `ssh -i ~/.ssh/github_actions usuario@vps`
   - [ ] Docker instalado na VPS
@@ -303,6 +313,7 @@ VPS_SSH_KEY=-----BEGIN OPENSSH PRIVATE KEY-----
 [sua chave aqui]
 -----END OPENSSH PRIVATE KEY-----
 VPS_PORT=22
+VPS_SSH_PASSPHRASE=minhaPassphraseOuVazioSeNaoTem
 
 # Aplicação
 APP_PORT=3000
@@ -313,5 +324,6 @@ MONGODB_URI=mongodb://mongodb:27017/moviesDB
 
 **⚠️ IMPORTANTE**: Guarde este template em local seguro (não no Git)!
 
-**Versão**: 1.0.0  
+**Versão**: 1.1.0  
 **Última atualização**: Novembro 2025
+**Alterações**: Adicionado suporte/documentação para `VPS_SSH_PASSPHRASE`
