@@ -159,7 +159,7 @@ movieManagementWB/
 | PUT | `/movies/:id` | Atualizar filme | ✅ |
 | DELETE | `/movies/:id` | Deletar filme | ✅ |
 | GET | `/search` | Busca geral | ✅ |
-| GET | `/wakeup` | Health check | ✅ |
+
 
 ---
 
@@ -240,11 +240,8 @@ npm test
 
 ### Verificação
 ```bash
-# Health check
-curl http://localhost:3000/wakeup
-
-# Resposta esperada
-{"message":"I'm awake!"}
+# Testar endpoint
+curl http://localhost:3000/movies?page=1&limit=1
 ```
 
 ---

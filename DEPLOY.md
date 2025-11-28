@@ -7,7 +7,6 @@ Este projeto possui pipeline completa de CI/CD usando GitHub Actions com:
 - ✅ Build de imagem Docker
 - ✅ Push para Docker Hub
 - ✅ Deploy automático em VPS
-- ✅ Health checks
 - ✅ Rollback manual
 
 ---
@@ -134,8 +133,7 @@ A pipeline é executada automaticamente em:
 │   3. DEPLOY      │  Deploy em VPS
 │   ├─ SCP files   │
 │   ├─ Pull image  │
-│   ├─ Start app   │
-│   └─ Health check│
+│   └─ Start app   │
 └──────────────────┘
 ```
 
@@ -160,7 +158,6 @@ A pipeline é executada automaticamente em:
 - Pull da nova imagem
 - Para containers antigos
 - Inicia novos containers
-- Executa health check
 - Limpa imagens antigas
 
 ---
@@ -173,7 +170,6 @@ Características:
 - ✅ Multi-stage build (reduz tamanho)
 - ✅ Usa Alpine Linux (leve)
 - ✅ Usuário não-root (segurança)
-- ✅ Health check integrado
 - ✅ Cache de dependências
 
 ### Docker Compose
@@ -226,8 +222,8 @@ docker run -p 3000:3000 \
   -e MONGODB_URI=mongodb://host.docker.internal:27017/moviesDB \
   movie-management-api:local
 
-# Verificar
-curl http://localhost:3000/wakeup
+# Verificar endpoint funcional
+curl http://localhost:3000/movies?page=1&limit=1
 ```
 
 ### Deploy na VPS (Manual)
@@ -247,7 +243,7 @@ docker-compose -f docker-compose.prod.yml up -d
 
 # 4. Verificar
 docker-compose ps
-curl http://localhost:3000/wakeup
+curl http://localhost:3000/movies?page=1&limit=1
 ```
 
 ---
@@ -283,14 +279,11 @@ docker stats movie-api movie-mongodb
 docker inspect movie-api
 ```
 
-### Health Check
+### Verificação Básica
 
 ```bash
-# Verificar status do health check
-docker inspect --format='{{json .State.Health}}' movie-api | jq
-
-# Testar endpoint manualmente
-curl http://localhost:3000/wakeup
+docker-compose ps
+curl http://localhost:3000/movies?page=1&limit=1
 ```
 
 ---
@@ -400,9 +393,6 @@ docker-compose logs
 # Ver logs
 docker-compose logs app
 
-# Verificar health check
-docker inspect movie-api | grep -A 10 Health
-
 # Entrar no container
 docker exec -it movie-api sh
 ```
@@ -501,7 +491,6 @@ docker-compose up -d
 
 ### Após Deploy
 
-- [ ] Health check passou
 - [ ] Logs não mostram erros
 - [ ] Endpoints respondem corretamente
 - [ ] MongoDB conectado
@@ -560,8 +549,8 @@ docker exec movie-mongodb mongodump --out /backup
 # Entrar no container
 docker exec -it movie-api sh
 
-# Health check
-curl http://localhost:3000/wakeup
+# Verificar endpoint
+curl http://localhost:3000/movies?page=1&limit=1
 
 # Ver recursos
 docker stats
@@ -578,5 +567,6 @@ docker stats
 
 ---
 
-**Versão**: 1.0.0  
-**Última atualização**: Novembro 2025
+**Versão**: 1.1.0  
+**Última atualização**: Novembro 2025  
+**Mudança**: Removidas referências a health check

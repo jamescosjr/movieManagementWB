@@ -329,7 +329,7 @@ NODE_ENV=development
 - `PUT /movies/:id` - Atualizar filme
 - `DELETE /movies/:id` - Deletar filme
 - `GET /search` - Busca geral (query: searchType, searchTerm)
-- `GET /wakeup` - Health check
+
 
 ## 🎓 Boas Práticas Específicas
 

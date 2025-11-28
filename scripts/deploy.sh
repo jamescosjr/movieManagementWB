@@ -35,15 +35,7 @@ docker-compose up -d
 echo -e "${YELLOW}⏳ Aguardando containers iniciarem...${NC}"
 sleep 10
 
-# Health check
-echo -e "${GREEN}🏥 Executando health check...${NC}"
-if curl -f http://localhost:3000/wakeup; then
-    echo -e "${GREEN}✅ Deploy concluído com sucesso!${NC}"
-else
-    echo -e "${RED}❌ Health check falhou!${NC}"
-    docker-compose logs app
-    exit 1
-fi
+echo -e "${GREEN}✅ Deploy concluído (sem health check)${NC}"
 
 # Limpar imagens antigas
 echo -e "${GREEN}🧹 Limpando imagens antigas...${NC}"

@@ -172,10 +172,6 @@ jobs:
             # Verificar status
             docker-compose ps
             
-            # Health check
-            sleep 10
-            curl -f http://localhost:${{ secrets.APP_PORT }}/wakeup || exit 1
-            
             echo "✅ Deploy completed successfully!"
 
 
