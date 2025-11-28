@@ -144,6 +144,9 @@ jobs:
           script: |
             cd /home/${{ secrets.VPS_USERNAME }}/movie-management-api
             
+            # Baixar docker-compose.yml atualizado
+            curl -o docker-compose.yml https://raw.githubusercontent.com/jamescosjr/movieManagementWB/main/docker-compose.prod.yml
+            
             # Criar .env se não existir
             if [ ! -f .env ]; then
               echo "Creating .env file..."
