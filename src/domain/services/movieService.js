@@ -186,41 +186,55 @@ export async function findByYearService(year, page, limit) {
     }
 }
 
-export async function searchMoviesService({ searchType, searchTerm, page, limit }) {
+export async function searchMoviesService(params = {}) {
     try {
-        let movies;
+        let { searchType, searchTerm, page, limit } = params;
 
+        if ((!searchType || !searchTerm) && params) {
+            if (params.title) {
+                searchType = 'title';
+                searchTerm = params.title;
+            } else if (params.director) {
+                searchType = 'director';
+                searchTerm = params.director;
+            } else if (params.genre) {
+                searchType = 'genre';
+                searchTerm = params.genre;
+            } else if (params.year) {
+                searchType = 'year';
+                searchTerm = params.year;
+            }
+        }
+
+        page = parseInt(page, 10);
+        limit = parseInt(limit, 10);
+        if (isNaN(page) || page < 1) {
+            page = (page === 0) ? 1 : 1;
+        }
+        if (isNaN(limit) || limit < 1) {
+            limit = 10;
+        }
+
+        let result;
 
         switch (true) {
-            case Boolean(searchType == "title"): {
-                const title = searchTerm;
-                movies = await findByTitleService(title, page, limit);
+            case Boolean(searchType === 'title'):
+                result = await findByTitleService(searchTerm, page, limit);
                 break;
-            }
-            case Boolean(searchType == "director"): {
-                const director = searchTerm;
-                movies = await findByDirectorService(director, page, limit);
+            case Boolean(searchType === 'director'):
+                result = await findByDirectorService(searchTerm, page, limit);
                 break;
-            }
-            case Boolean(searchType == "genre"): {
-                const genre = searchTerm;
-                movies = await findByGenreService(genre, page, limit);
+            case Boolean(searchType === 'genre'):
+                result = await findByGenreService(searchTerm, page, limit);
                 break;
-            }
-            case Boolean(searchType == "year"): {
-                const year = parseInt(searchTerm, 10);
-                movies = await findByYearService(year, page, limit);
+            case Boolean(searchType === 'year'):
+                result = await findByYearService(parseInt(searchTerm, 10), page, limit);
                 break;
-            }
             default:
-                movies = await getAllMoviesService(page, limit);
+                result = await getAllMoviesService(page, limit);
         }
 
-        if (!movies || movies.length === 0) {
-            return [];
-        }
-
-        return movies;
+        return result;
     } catch (error) {
         throw new AppError(error.message || 'Error searching movies', 500);
     }
