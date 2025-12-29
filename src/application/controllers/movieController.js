@@ -153,16 +153,8 @@ export async function listMoviesbyYearHandler(req, res, next) {
 }
 
 export async function searchMoviesHandler(req, res, next) {
-    const { searchType, searchTerm } = req.query;
-    const page = parseInt(req.query.page, 10) || 1;
-    const limit = parseInt(req.query.limit, 10) || 10;
-
-    if (page < 1 || limit < 1) {
-        return next(new ValidationError("Page and limit must be positive integers."));
-    }
-
     try {
-        const result = await searchMoviesService({ searchType, searchTerm, page, limit });
+        const result = await searchMoviesService(req.query);
         res.status(200).json(result);
     } catch (error) {
         next(error);
