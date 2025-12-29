@@ -38,16 +38,26 @@ describe("GET /movies/search", () => {
             .query({ page: 0, limit: 10 });
 
         expect(response.status).toBe(200);
-        expect(response.body.data).toEqual(
-            expect.arrayContaining([
-                expect.objectContaining({
-                    title: "Inception",
-                    director: "Christopher Nolan",
-                    genre: "Sci-Fi",
-                    year: 2010
-                })
-            ])
-        );
+        // exact match: response should contain both movies sorted by title
+        const actualAll = response.body.data.sort((a, b) => a.title.localeCompare(b.title));
+        expect(actualAll).toEqual([
+            {
+                id: movie1._id.toString(),
+                title: "Inception",
+                director: "Christopher Nolan",
+                genre: "Sci-Fi",
+                year: 2010,
+                __v: 0
+            },
+            {
+                id: movie2._id.toString(),
+                title: "The Dark Knight",
+                director: "Christopher Nolan",
+                genre: "Action",
+                year: 2008,
+                __v: 0
+            }
+        ]);
     });
 
     it("should return the list if only the title is on the search query", async () => {
@@ -69,18 +79,20 @@ describe("GET /movies/search", () => {
 
         const response = await supertest(app)
             .get("/search")
-            .query({ title: "Inception" });
+            .query({ title: "Inception", page: 0, limit: 10 });
 
         expect(response.status).toBe(200);
         expect(response.body.data).toEqual(
-            expect.arrayContaining([
-                expect.objectContaining({
+            [
+                {
+                    id: movie1._id.toString(),
                     title: "Inception",
                     director: "Christopher Nolan",
                     genre: "Sci-Fi",
-                    year: 2010
-                })
-            ])
+                    year: 2010,
+                    __v: 0
+                }
+            ]
         );
     });
 
@@ -103,25 +115,28 @@ describe("GET /movies/search", () => {
 
         const response = await supertest(app)
             .get("/search")
-            .query({ director: "Christopher Nolan" });
+            .query({ director: "Christopher Nolan", page: 0, limit: 10 });
 
         expect(response.status).toBe(200);
-        expect(response.body.data).toEqual(
-            expect.arrayContaining([
-                expect.objectContaining({
-                    title: "Inception",
-                    director: "Christopher Nolan",
-                    genre: "Sci-Fi",
-                    year: 2010
-                }),
-                expect.objectContaining({
-                    title: "The Dark Knight",
-                    director: "Christopher Nolan",
-                    genre: "Action",
-                    year: 2008
-                })
-            ])
-        );
+        const actualByDirector = response.body.data.sort((a, b) => a.title.localeCompare(b.title));
+        expect(actualByDirector).toEqual([
+            {
+                id: movie1._id.toString(),
+                title: "Inception",
+                director: "Christopher Nolan",
+                genre: "Sci-Fi",
+                year: 2010,
+                __v: 0
+            },
+            {
+                id: movie2._id.toString(),
+                title: "The Dark Knight",
+                director: "Christopher Nolan",
+                genre: "Action",
+                year: 2008,
+                __v: 0
+            }
+        ]);
     });
     it("should return the list if only the genre is on the search query", async () => {
         const movie1 = new Movie({
@@ -142,19 +157,19 @@ describe("GET /movies/search", () => {
 
         const response = await supertest(app)
             .get("/search")
-            .query({ searchType: "genre", searchTerm: "Action" });
+            .query({ searchType: "genre", searchTerm: "Action", page: 0, limit: 10 });
 
         expect(response.status).toBe(200);
-        expect(response.body.data).toEqual(
-            expect.arrayContaining([
-                expect.objectContaining({
-                    title: "The Dark Knight",
-                    director: "Christopher Nolan",
-                    genre: "Action",
-                    year: 2008
-                })
-            ])
-        );
+        expect(response.body.data).toEqual([
+            {
+                id: movie2._id.toString(),
+                title: "The Dark Knight",
+                director: "Christopher Nolan",
+                genre: "Action",
+                year: 2008,
+                __v: 0
+            }
+        ]);
     });
     it("should return the list if only the year is on the search query", async () => {
         const movie1 = new Movie({
@@ -175,18 +190,18 @@ describe("GET /movies/search", () => {
 
         const response = await supertest(app)
             .get("/search")
-            .query({ searchType: "year", searchTerm: 2008 });
+            .query({ searchType: "year", searchTerm: 2008, page: 0, limit: 10 });
 
         expect(response.status).toBe(200);
-        expect(response.body.data).toEqual(
-            expect.arrayContaining([
-                expect.objectContaining({
-                    title: "The Dark Knight",
-                    director: "Christopher Nolan",
-                    genre: "Action",
-                    year: 2008
-                })
-            ])
-        );
+        expect(response.body.data).toEqual([
+            {
+                id: movie2._id.toString(),
+                title: "The Dark Knight",
+                director: "Christopher Nolan",
+                genre: "Action",
+                year: 2008,
+                __v: 0
+            }
+        ]);
     });
 });
