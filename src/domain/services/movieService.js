@@ -204,17 +204,17 @@ export async function searchMoviesService(params = {}) {
 
         let result;
 
-        switch (true) {
-            case Boolean(searchType === 'title'):
+        switch (searchType) {
+            case 'title':
                 result = await findByTitleService(searchTerm, page, limit);
                 break;
-            case Boolean(searchType === 'director'):
+            case 'director':
                 result = await findByDirectorService(searchTerm, page, limit);
                 break;
-            case Boolean(searchType === 'genre'):
+            case 'genre':
                 result = await findByGenreService(searchTerm, page, limit);
                 break;
-            case Boolean(searchType === 'year'):
+            case 'year':
                 result = await findByYearService(parseInt(searchTerm, 10), page, limit);
                 break;
             default:
