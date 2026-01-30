@@ -38,7 +38,6 @@ describe("GET /movies/search", () => {
             .query({ page: 0, limit: 10 });
 
         expect(response.status).toBe(200);
-        // exact match: response should contain both movies sorted by title
         const actualAll = response.body.data.sort((a, b) => a.title.localeCompare(b.title));
         expect(actualAll).toEqual([
             {
