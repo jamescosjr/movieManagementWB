@@ -51,7 +51,7 @@ export async function getAllMoviesService(page, limit) {
 
         const formattedMovies = movies.map(movie => {
             const { _id, ...rest } = movie;
-            return { ...rest, id: _id };
+            return { ...rest, id: _id.toString() };
         });
 
         return {
@@ -80,7 +80,7 @@ export async function findByTitleService(title, page, limit) {
 
         const formattedMovies = movies.map(movie => {
             const { _id, ...rest } = movie;
-            return { ...rest, id: _id };
+            return { ...rest, id: _id.toString() };
         });
 
         return {
@@ -109,7 +109,7 @@ export async function findByGenreService(genre, page, limit) {
 
         const formattedMovies = movies.map(movie => {
             const { _id, ...rest } = movie;
-            return { ...rest, id: _id };
+            return { ...rest, id: _id.toString() };
         });
 
         return {
@@ -138,7 +138,7 @@ export async function findByDirectorService(director, page, limit) {
 
         const formattedMovies = movies.map(movie => {
             const { _id, ...rest } = movie;
-            return { ...rest, id: _id };
+            return { ...rest, id: _id.toString() };
         });
 
         return {
@@ -172,7 +172,7 @@ export async function findByYearService(year, page, limit) {
 
         const formattedMovies = movies.map(movie => {
             const { _id, ...rest } = movie;
-            return { ...rest, id: _id };
+            return { ...rest, id: _id.toString() };
         });
 
         return {
@@ -189,6 +189,9 @@ export async function findByYearService(year, page, limit) {
 export async function searchMoviesService(params = {}) {
     try {
         let { page, limit, searchType, searchTerm } = params;
+
+        if (searchType) searchType = searchType.trim().toLowerCase();
+        if (searchTerm) searchTerm = searchTerm.trim();
 
         page = parseInt(page, 10);
         limit = parseInt(limit, 10);
