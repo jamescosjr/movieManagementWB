@@ -154,7 +154,8 @@ export async function listMoviesbyYearHandler(req, res, next) {
 
 export async function searchMoviesHandler(req, res, next) {
     try {
-        const result = await searchMoviesService(req.query);
+        const params = { ...req.query, ...req.body };
+        const result = await searchMoviesService(params);
         res.status(200).json(result);
     } catch (error) {
         next(error);
