@@ -196,7 +196,7 @@ export async function searchMoviesService(params = {}) {
         page = parseInt(page, 10);
         limit = parseInt(limit, 10);
         if (isNaN(page) || page < 1) {
-            page = (page === 0) ? 1 : 1;
+            page = (page === 0) ? 1 : 0;
         }
         if (isNaN(limit) || limit < 1) {
             limit = 10;
