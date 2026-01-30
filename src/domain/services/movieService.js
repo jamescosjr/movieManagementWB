@@ -188,23 +188,7 @@ export async function findByYearService(year, page, limit) {
 
 export async function searchMoviesService(params = {}) {
     try {
-        let { searchType, searchTerm, page, limit } = params;
-
-        if ((!searchType || !searchTerm) && params) {
-            if (params.title) {
-                searchType = 'title';
-                searchTerm = params.title;
-            } else if (params.director) {
-                searchType = 'director';
-                searchTerm = params.director;
-            } else if (params.genre) {
-                searchType = 'genre';
-                searchTerm = params.genre;
-            } else if (params.year) {
-                searchType = 'year';
-                searchTerm = params.year;
-            }
-        }
+        let { page, limit, searchType, searchTerm } = params;
 
         page = parseInt(page, 10);
         limit = parseInt(limit, 10);
