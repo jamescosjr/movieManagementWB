@@ -60,41 +60,43 @@ describe("GET /movies/search", () => {
         ]);
     });
 
-    it("should return the list if only the title is on the search query", async () => {
-        const movie1 = new Movie({
-            title: "Inception",
-            director: "Christopher Nolan",
-            genre: "Sci-Fi",
-            year: 2010
-        });
-        await movie1.save();
-
-        const movie2 = new Movie({
-            title: "The Dark Knight",
-            director: "Christopher Nolan",
-            genre: "Action",
-            year: 2008
-        });
-        await movie2.save();
-
-        const response = await supertest(app)
-            .get("/search")
-            .query({ title: "Inception", page: 0, limit: 10 });
-
-        expect(response.status).toBe(200);
-        expect(response.body.data).toEqual(
-            [
-                {
-                    id: movie1._id.toString(),
-                    title: "Inception",
-                    director: "Christopher Nolan",
-                    genre: "Sci-Fi",
-                    year: 2010,
-                    __v: 0
-                }
-            ]
-        );
+    it("should return the list filtering by title using searchType and searchTerm strategy", async () => {
+    const movie1 = new Movie({
+        title: "Inception",
+        director: "Christopher Nolan",
+        genre: "Sci-Fi",
+        year: 2010
     });
+    await movie1.save();
+
+    const movie2 = new Movie({
+        title: "The Dark Knight",
+        director: "Christopher Nolan",
+        genre: "Action",
+        year: 2008
+    });
+    await movie2.save();
+
+    const response = await supertest(app)
+        .get("/search")
+        .query({ 
+            page: 1,          
+            limit: 10,        
+            searchType: "title",
+            searchTerm: "Incepti"
+        });
+
+    expect(response.status).toBe(200);
+
+    expect(response.body.data).toHaveLength(1); 
+    
+    expect(response.body.data[0]).toEqual(
+        expect.objectContaining({
+            title: "Inception",
+            director: "Christopher Nolan"
+        })
+    );
+});
 
     it("should return the list if only the director is on the search query", async () => {
         const movie1 = new Movie({
