@@ -186,12 +186,18 @@ export async function findByYearService(year, page, limit) {
     }
 }
 
-export async function searchMoviesService(params = {}) {
+export async function searchMoviesService(...args) {
     try {
-        let { page, limit, searchType, searchTerm } = params;
+        let searchType, searchTerm, page, limit;
 
-        if (searchType) searchType = searchType.trim().toLowerCase();
-        if (searchTerm) searchTerm = searchTerm.trim();
+        if (args.length === 1 && typeof args[0] === 'object' && args[0] !== null) {
+            ({ page, limit, searchType, searchTerm } = args[0]);
+        } else {
+            [searchType, searchTerm, page, limit] = args;
+        }
+
+        if (searchType) searchType = String(searchType).trim().toLowerCase();
+        if (searchTerm || searchTerm === 0) searchTerm = String(searchTerm).trim();
 
         page = parseInt(page, 10);
         limit = parseInt(limit, 10);
