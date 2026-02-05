@@ -222,7 +222,6 @@ export async function searchMoviesService(searchType, searchTerm, page, limit) {
                 break;
             }
             case 'year': {
-                console.warn('Searching by year with searchTerm:', searchTerm);
                 const year = parseInt(searchTerm, 10);
                 result = await findByYearService(year, dbPage, limit);
                 break;
