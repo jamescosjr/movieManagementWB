@@ -153,9 +153,26 @@ export async function listMoviesbyYearHandler(req, res, next) {
 }
 
 export async function searchMoviesHandler(req, res, next) {
-    const { searchType, searchTerm } = req.query;
-    const page = parseInt(req.query.page, 10) || 1;
-    const limit = parseInt(req.query.limit, 10) || 10;
+    let searchType = req.query.searchType || req.params.searchType || req.body?.searchType;
+    let searchTerm = req.query.searchTerm || req.params.searchTerm || req.body?.searchTerm;
+
+    if (!searchType || !searchTerm) {
+        const possibleFilters = ['director', 'title', 'genre', 'year'];
+        
+        const foundFilter = possibleFilters.find(field => req.query[field] || req.params[field]);
+        
+        if (foundFilter) {
+            searchType = foundFilter;
+            searchTerm = req.query[foundFilter] || req.params[foundFilter];
+        }
+    }
+
+    const page = parseInt(req.query.page || req.params.page || req.body?.page, 10) || 1;
+    const limit = parseInt(req.query.limit || req.params.limit || req.body?.limit, 10) || 10;
+
+    if (!searchType || !searchTerm) {
+        return next(new ValidationError("É necessário informar um termo de busca (ex: ?director=Nolan ou ?searchType=director&searchTerm=Nolan)"));
+    }
 
     if (page < 1 || limit < 1) {
         return next(new ValidationError("Page and limit must be positive integers."));
