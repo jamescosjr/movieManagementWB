@@ -194,14 +194,17 @@ export async function searchMoviesService(searchType, searchTerm, page, limit) {
         page = parseInt(page, 10);
         limit = parseInt(limit, 10);
         if (isNaN(page) || page < 1) {
-            page = 0;
+             return {
+                data: [],
+                currentPage: 0,
+                totalCount: 0,
+                totalPages: 0
+            };
         }
         if (isNaN(limit) || limit < 1) {
             limit = 10;
         }
         
-        page = page -1;
-
         let result;
 
         switch (searchType) {
