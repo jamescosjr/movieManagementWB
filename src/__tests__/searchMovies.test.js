@@ -79,7 +79,7 @@ describe("GET /movies/search", () => {
     const response = await supertest(app)
         .get("/search")
         .query({ 
-            page: 1,          
+            page: 0,          
             limit: 10,        
             searchType: "title",
             searchTerm: "Incepti"
