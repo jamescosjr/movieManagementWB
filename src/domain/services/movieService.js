@@ -193,44 +193,42 @@ export async function searchMoviesService(searchType, searchTerm, page, limit) {
 
         page = parseInt(page, 10);
         limit = parseInt(limit, 10);
-        if (isNaN(page) || page < 1) {
-             return {
-                data: [],
-                currentPage: 0,
-                totalCount: 0,
-                totalPages: 0
-            };
+        if (isNaN(page) || page < 0) {
+            page = 0;
         }
         if (isNaN(limit) || limit < 1) {
             limit = 10;
         }
+
+        const dbPage = page + 1;
+
         
         let result;
 
         switch (searchType) {
             case 'title': {
                 const title = searchTerm;
-                result = await findByTitleService(title, page, limit);
+                result = await findByTitleService(title, dbPage, limit);
                 break;
             }
             case 'director': {
                 const director = searchTerm;
-                result = await findByDirectorService(director, page, limit);
+                result = await findByDirectorService(director, dbPage, limit);
                 break;
             }
             case 'genre': {
                 const genre = searchTerm;
-                result = await findByGenreService(genre, page, limit);
+                result = await findByGenreService(genre, dbPage, limit);
                 break;
             }
             case 'year': {
                 console.warn('Searching by year with searchTerm:', searchTerm);
                 const year = parseInt(searchTerm, 10);
-                result = await findByYearService(year, page, limit);
+                result = await findByYearService(year, dbPage, limit);
                 break;
             }
             default:
-                result = await getAllMoviesService(page, limit);
+                result = await getAllMoviesService(dbPage, limit);
         }
 
         return result;
