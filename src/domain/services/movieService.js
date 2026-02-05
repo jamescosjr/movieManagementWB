@@ -203,18 +203,26 @@ export async function searchMoviesService(searchType, searchTerm, page, limit) {
         let result;
 
         switch (searchType) {
-            case 'title':
-                result = await findByTitleService(searchTerm, page, limit);
+            case 'title': {
+                const title = searchTerm;
+                result = await findByTitleService(title, page, limit);
                 break;
-            case 'director':
-                result = await findByDirectorService(searchTerm, page, limit);
+            }
+            case 'director': {
+                const director = searchTerm;
+                result = await findByDirectorService(director, page, limit);
                 break;
-            case 'genre':
-                result = await findByGenreService(searchTerm, page, limit);
+            }
+            case 'genre': {
+                const genre = searchTerm;
+                result = await findByGenreService(genre, page, limit);
                 break;
-            case 'year':
-                result = await findByYearService(parseInt(searchTerm, 10), page, limit);
+            }
+            case 'year': {
+                const year = parseInt(searchTerm, 10);
+                result = await findByYearService(year, page, limit);
                 break;
+            }
             default:
                 result = await getAllMoviesService(page, limit);
         }
