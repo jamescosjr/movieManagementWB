@@ -188,51 +188,48 @@ export async function findByYearService(year, page, limit) {
 
 export async function searchMoviesService(searchType, searchTerm, page, limit) {
     try {
-        console.log(`🔎 SERVICE RECEBEU: Type=[${searchType}] Term=[${searchTerm}]`);
-
         if (searchType) searchType = String(searchType).trim().toLowerCase();
         if (searchTerm || searchTerm === 0) searchTerm = String(searchTerm).trim();
 
-        // Lógica de paginação...
         page = parseInt(page, 10);
         limit = parseInt(limit, 10);
-        if (isNaN(page) || page < 1) page = 0;
-        if (isNaN(limit) || limit < 1) limit = 10;
+        if (isNaN(page) || page < 1) {
+            page = 1;
+        }
+        if (isNaN(limit) || limit < 1) {
+            limit = 10;
+        }
 
         let result;
 
-        console.log(`🔄 SWITCH no valor: [${searchType}]`);
-
         switch (searchType) {
             case 'title': {
-                console.log('➡️ Entrou no CASE: TITLE');
-                result = await findByTitleService(searchTerm, page, limit);
+                const title = searchTerm;
+                result = await findByTitleService(title, page, limit);
                 break;
             }
             case 'director': {
-                console.log('➡️ Entrou no CASE: DIRECTOR');
-                result = await findByDirectorService(searchTerm, page, limit);
+                const director = searchTerm;
+                result = await findByDirectorService(director, page, limit);
                 break;
             }
             case 'genre': {
-                console.log('➡️ Entrou no CASE: GENRE');
-                result = await findByGenreService(searchTerm, page, limit);
+                const genre = searchTerm;
+                result = await findByGenreService(genre, page, limit);
                 break;
             }
             case 'year': {
-                console.log('➡️ Entrou no CASE: YEAR');
+                console.warn('Searching by year with searchTerm:', searchTerm);
                 const year = parseInt(searchTerm, 10);
                 result = await findByYearService(year, page, limit);
                 break;
             }
             default:
-                console.log('⚠️ Caiu no DEFAULT (GetAll) - SearchType não bateu ou vazio');
                 result = await getAllMoviesService(page, limit);
         }
 
         return result;
     } catch (error) {
-        console.error("🔥 ERRO NO SERVICE:", error);
         throw new AppError(error.message || 'Error searching movies', 500);
     }
 }
